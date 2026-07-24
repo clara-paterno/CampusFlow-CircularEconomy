@@ -73,6 +73,12 @@ def pagina_inicial():
 def pagina_sobre():
     return "Esta é a página sobre o projeto de Economia Circular."
 
+
+@app.route("/cadastrar")
+def pagina_cadastrar():
+    return render_template("cadastrar.html")
+
+
 @app.route("/api/anuncios", methods=["POST"])
 def criar_anuncio():
     dados = request.get_json(silent=True)
