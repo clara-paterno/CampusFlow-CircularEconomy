@@ -1,0 +1,99 @@
+/* Remove os espaçamentos automáticos do navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Configurações gerais da página */
+body {
+    background-color: #9aa8c1;
+    color: #252238;
+    font-family: Arial, sans-serif;
+    padding: 32px;
+}
+
+/* Cabeçalho principal */
+.cabecalho {
+    width: 100%;
+    max-width: 1300px;
+
+    margin: 0 auto;
+    padding: 20px 28px;
+
+    background-color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 20px 20px 0 0;
+}
+
+/* Logo do projeto */
+.logo {
+    color: #252238;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icone {
+    font-size: 24px;
+}
+
+/* Menu central */
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.menu a {
+    color: #474358;
+    text-decoration: none;
+    font-size: 14px;
+
+    transition: color 0.2s ease;
+}
+
+.menu a:hover {
+    color: #7668a9;
+}
+
+/* Botão de anunciar */
+.botao-anunciar {
+    background-color: #29243f;
+    color: #ffffff;
+
+    padding: 12px 22px;
+    border-radius: 999px;
+
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.botao-anunciar:hover {
+    background-color: #4a416f;
+    transform: translateY(-2px);
+}
+
+/* Apenas para organizar temporariamente o conteúdo abaixo */
+main {
+    width: 100%;
+    max-width: 1300px;
+
+    margin: 0 auto;
+    padding: 80px 40px;
+
+    background-color: #ffffff;
+}
