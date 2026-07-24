@@ -164,11 +164,15 @@ def listar_anuncios():
 
     consulta = Anuncio.query
 
+    # Aplica o filtro somente quando uma categoria for enviada
     if categoria:
+        categoria = categoria.strip()
+
         consulta = consulta.filter(
-            Anuncio.categoria.ilike(f"%{categoria}%")
+            Anuncio.categoria.ilike(categoria)
         )
 
+    # Os anúncios mais recentes aparecem primeiro
     anuncios = consulta.order_by(
         Anuncio.criado_em.desc()
     ).all()
@@ -194,8 +198,10 @@ def listar_anuncios():
 
     return jsonify({
         "quantidade": len(resultado),
+        "categoria": categoria,
         "anuncios": resultado
     }), 200
+
 
 @app.route("/api/anuncios/<int:anuncio_id>", methods=["DELETE"])
 def excluir_anuncio(anuncio_id):
