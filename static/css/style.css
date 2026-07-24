@@ -97,3 +97,297 @@ main {
 
     background-color: #ffffff;
 }
+
+/* ==================================================
+   Página de cadastro de anúncio
+================================================== */
+
+.pagina-cadastro {
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 24px;
+
+    background-color: #a7b6cf;
+    color: #1f2937;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.estrutura-cadastro {
+    width: 100%;
+    max-width: 1520px;
+    margin: 0 auto;
+}
+
+.cabecalho-cadastro {
+    width: 100%;
+    min-height: 88px;
+    padding: 0 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.conteudo-cadastro {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 66px 20px 56px;
+
+    display: flex;
+    justify-content: center;
+
+    background-color: #ffffff;
+}
+
+.logo-cadastro {
+    color: #162465;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.link-voltar {
+    color: #475569;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.link-voltar:hover {
+    color: #161a65;
+}
+
+
+.cartao-cadastro {
+    width: 100%;
+    max-width: 760px;
+    padding: 40px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+}
+
+.cabecalho-formulario {
+    margin-bottom: 32px;
+}
+
+.etiqueta-formulario {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 7px 12px;
+    color: #166534;
+    background-color: #dcfce7;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.cabecalho-formulario h1 {
+    margin: 0 0 10px;
+    color: #172554;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    line-height: 1.15;
+}
+
+.cabecalho-formulario p {
+    max-width: 600px;
+    margin: 0;
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.form-anuncio {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.campo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-formulario label,
+.grupo-tipo-anuncio legend {
+    color: #334155;
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.campo-formulario input,
+.campo-formulario textarea,
+.campo-formulario select {
+    width: 100%;
+    padding: 14px 16px;
+    color: #1f2937;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    outline: none;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.campo-formulario textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.campo-formulario input::placeholder,
+.campo-formulario textarea::placeholder {
+    color: #94a3b8;
+}
+
+.campo-formulario input:focus,
+.campo-formulario textarea:focus,
+.campo-formulario select:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
+}
+
+.linha-formulario {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+}
+
+.grupo-tipo-anuncio {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.grupo-tipo-anuncio legend {
+    margin-bottom: 10px;
+}
+
+.opcoes-tipo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.opcao-tipo {
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.opcao-tipo:hover {
+    border-color: #16a34a;
+    background-color: #f0fdf4;
+    transform: translateY(-1px);
+}
+
+.opcao-tipo input {
+    margin-top: 4px;
+    accent-color: #16a34a;
+}
+
+.opcao-tipo span {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.opcao-tipo strong {
+    color: #334155;
+}
+
+.opcao-tipo small {
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.texto-ajuda {
+    color: #64748b;
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.botao-publicar {
+    width: 100%;
+    padding: 15px 24px;
+    color: #ffffff;
+    background-color: #15803d;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.botao-publicar:hover {
+    background-color: #166534;
+    box-shadow: 0 10px 24px rgba(21, 128, 61, 0.2);
+    transform: translateY(-1px);
+}
+
+.botao-publicar:active {
+    transform: translateY(0);
+}
+
+.mensagem-formulario {
+    min-height: 22px;
+    margin: 0;
+    text-align: center;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+/* Responsividade da tela de cadastro */
+@media (max-width: 700px) {
+    .cabecalho-cadastro {
+        width: 100%;
+        min-height: 72px;
+        margin-top: 16px;
+        padding: 0 18px;
+    }
+
+    .logo-cadastro {
+        font-size: 1rem;
+    }
+
+    .link-voltar {
+        font-size: 0.82rem;
+    }
+
+    .conteudo-cadastro {
+        padding: 20px 14px 40px;
+    }
+
+    .cartao-cadastro {
+        padding: 26px 20px;
+        border-radius: 18px;
+    }
+}

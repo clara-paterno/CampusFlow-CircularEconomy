@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Cadastrar anúncio | Economia Circular</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body class="pagina-cadastro">
+
+    <div class="estrutura-cadastro">
+
+        <header class="cabecalho-cadastro">
+
+            <a
+                href="{{ url_for('pagina_inicial') }}"
+                class="logo-cadastro"
+            >
+                Economia Circular
+            </a>
+
+            <a
+                href="{{ url_for('pagina_inicial') }}"
+                class="link-voltar"
+            >
+                ← Voltar para o início
+            </a>
+
+        </header>
+
+        <main class="conteudo-cadastro">
+
+            <section class="cartao-cadastro">
+
+                <div class="cabecalho-formulario">
+
+                    <span class="etiqueta-formulario">
+                        Novo anúncio
+                    </span>
+
+                    <h1>Cadastre seu item</h1>
+
+                    <p>
+                        Preencha as informações abaixo para anunciar
+                        um item para venda ou doação.
+                    </p>
+
+                </div>
+
+                <form id="form-anuncio" class="form-anuncio">
+
+                    <div class="campo-formulario">
+
+                        <label for="titulo">
+                            Título do anúncio
+                        </label>
+
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            maxlength="150"
+                            placeholder="Ex.: Calculadora científica"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="campo-formulario">
+
+                        <label for="descricao">
+                            Descrição
+                        </label>
+
+                        <textarea
+                            id="descricao"
+                            name="descricao"
+                            rows="5"
+                            placeholder="Descreva o estado do item e outras informações importantes."
+                            required
+                        ></textarea>
+
+                    </div>
+
+                    <div class="linha-formulario">
+
+                        <div class="campo-formulario">
+
+                            <label for="categoria">
+                                Categoria
+                            </label>
+
+                            <select
+                                id="categoria"
+                                name="categoria"
+                                required
+                            >
+                                <option value="" selected disabled>
+                                    Selecione uma categoria
+                                </option>
+
+                                <option value="Livros">
+                                    Livros
+                                </option>
+
+                                <option value="Engenharia">
+                                    Engenharia
+                                </option>
+
+                                <option value="Computação">
+                                    Computação
+                                </option>
+
+                                <option value="Eletrônica">
+                                    Eletrônica
+                                </option>
+
+                                <option value="Materiais Acadêmicos">
+                                    Materiais Acadêmicos
+                                </option>
+
+                                <option value="Outros">
+                                    Outros
+                                </option>
+                            </select>
+
+                        </div>
+
+                        <div class="campo-formulario">
+
+                            <label for="preco">
+                                Preço
+                            </label>
+
+                            <input
+                                type="number"
+                                id="preco"
+                                name="preco"
+                                min="0"
+                                step="0.01"
+                                placeholder="R$ 0,00"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <fieldset class="grupo-tipo-anuncio">
+
+                        <legend>Tipo de anúncio</legend>
+
+                        <div class="opcoes-tipo">
+
+                            <label class="opcao-tipo">
+
+                                <input
+                                    type="radio"
+                                    name="tipo"
+                                    value="venda"
+                                    checked
+                                >
+
+                                <span>
+                                    <strong>Venda</strong>
+
+                                    <small>
+                                        Defina um preço para o item.
+                                    </small>
+                                </span>
+
+                            </label>
+
+                            <label class="opcao-tipo">
+
+                                <input
+                                    type="radio"
+                                    name="tipo"
+                                    value="doacao"
+                                >
+
+                                <span>
+                                    <strong>Doação</strong>
+
+                                    <small>
+                                        Disponibilize o item gratuitamente.
+                                    </small>
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </fieldset>
+
+                    <div class="campo-formulario">
+
+                        <label for="imagem_url">
+                            URL da imagem
+                        </label>
+
+                        <input
+                            type="url"
+                            id="imagem_url"
+                            name="imagem_url"
+                            placeholder="https://exemplo.com/imagem.jpg"
+                        >
+
+                        <small class="texto-ajuda">
+                            Por enquanto, utilizaremos uma URL de imagem simulada.
+                        </small>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="botao-publicar"
+                    >
+                        Publicar anúncio
+                    </button>
+
+                    <p
+                        id="mensagem-formulario"
+                        class="mensagem-formulario"
+                        aria-live="polite"
+                    ></p>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script
+        src="{{ url_for('static', filename='js/cadastrar.js') }}"
+    ></script>
+
+</body>
+
+</html>
