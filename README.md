@@ -26,3 +26,16 @@ CampusFlow is a circular economy marketplace designed for university students to
 - Filter listings
 - Product registration page
 
+## Diário de bordo da IA
+
+# Ferramenta utilizada 
+ChatGPT 
+
+# Alguns prompts
+
+
+# Link do chat
+
+# Reflexão crítica
+
+
