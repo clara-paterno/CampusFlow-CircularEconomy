@@ -6,6 +6,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
+# Para que o Json identifique acentuação
+app.json.ensure_ascii = False
+
 # Configuração do banco de dados SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///economia_circular.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
