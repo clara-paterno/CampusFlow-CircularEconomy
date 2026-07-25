@@ -1,41 +1,295 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Economia Circular</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>CampusFLow</title>
 
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 </head>
 
-<body>
-    <body>
+<body class="pagina-inicial">
+
     <header class="cabecalho">
-        <a href="/" class="logo">
+
+        <a
+            href="{{ url_for('pagina_inicial') }}"
+            class="logo"
+        >
             <span class="logo-icone">♻</span>
-            <span>Desapego Universitário</span>
+            <span>CampusFlow</span>
         </a>
 
         <nav class="menu">
-            <a href="/">Início</a>
-            <a href="#itens">Itens</a>
-            <a href="#como-funciona">Como funciona</a>
-            <a href="/meus-anuncios">Meus anúncios</a>
+            <a href="{{ url_for('pagina_inicial') }}">
+                Início
+            </a>
+
+            <a href="#como-funciona">
+                Como funciona
+            </a>
+
+            <a href="#itens">
+                Itens
+            </a>
+
+            <a href="/meus-anuncios">
+                Meus anúncios
+            </a>
         </nav>
 
-        <a href="/cadastrar" class="botao-anunciar">
+        <a
+            href="{{ url_for('pagina_cadastrar') }}"
+            class="botao-anunciar"
+        >
             Anunciar item
         </a>
+
     </header>
 
-    <main>
-        <h1>Dê uma nova vida ao que você não usa mais</h1>
+    <main class="conteudo-inicial">
+
+        <section class="secao-apresentacao">
+
+            <span class="etiqueta-apresentacao">
+                Economia circular no campus
+            </span>
+
+            <h1>
+                Dê uma nova vida ao que você não usa mais
+            </h1>
+
+            <p>
+                Compre, venda ou doe materiais dentro da
+                comunidade universitária.
+            </p>
+
+            <a
+                href="{{ url_for('pagina_cadastrar') }}"
+                class="botao-destaque"
+            >
+                Anunciar um item
+            </a>
+
+        </section>
+
+        <section
+    id="como-funciona"
+    class="secao-como-funciona"
+>
+
+    <div class="cabecalho-como-funciona">
+
+        <h2>Como funciona?</h2>
 
         <p>
-            Compre, venda ou doe materiais dentro da comunidade universitária.
+            O CampusFlow conecta estudantes que desejam vender,
+            doar ou encontrar materiais dentro da comunidade
+            universitária, incentivando o reaproveitamento e
+            reduzindo o desperdício.
         </p>
+
+    </div>
+
+    <div class="grade-como-funciona">
+
+        <article class="cartao-processo">
+
+            <span class="etiqueta-processo">
+                3 passos simples
+            </span>
+
+            <h3>
+                De estudante para estudante
+            </h3>
+
+            <ol class="lista-etapas">
+
+                <li>
+                    <strong>Anuncie</strong>
+                    <span>
+                        Cadastre o item que deseja vender ou doar.
+                    </span>
+                </li>
+
+                <li>
+                    <strong>Encontre</strong>
+                    <span>
+                        Explore os anúncios disponíveis por categoria.
+                    </span>
+                </li>
+
+                <li>
+                    <strong>Combine</strong>
+                    <span>
+                        Entre em contato e organize a entrega no campus.
+                    </span>
+                </li>
+
+            </ol>
+
+        </article>
+
+        <article class="cartao-estatistica">
+
+            <strong class="numero-estatistica">
+                120+
+            </strong>
+
+            <span class="titulo-estatistica">
+                anúncios publicados
+            </span>
+
+            <small>
+                Dado simulado
+            </small>
+
+        </article>
+
+        <article class="cartao-estatistica">
+
+            <strong class="numero-estatistica">
+                85
+            </strong>
+
+            <span class="titulo-estatistica">
+                itens reutilizados
+            </span>
+
+            <small>
+                Dado simulado
+            </small>
+
+        </article>
+
+    </div>
+
+</section>
+
+        <section
+            id="itens"
+            class="secao-vitrine"
+        >
+
+            <div class="cabecalho-vitrine">
+
+                <div>
+                    <span class="etiqueta-vitrine">
+                        Itens recentes
+                    </span>
+
+                    <h2>
+                        Encontre algo útil para você
+                    </h2>
+
+                    <p>
+                        Confira os anúncios mais recentes da
+                        comunidade universitária.
+                    </p>
+                </div>
+
+                <a
+                    href="{{ url_for('pagina_cadastrar') }}"
+                    class="link-novo-anuncio"
+                >
+                    Anunciar item
+                </a>
+
+            </div>
+
+            <div
+                class="filtros-categorias"
+                aria-label="Filtros por categoria"
+            >
+
+                <button
+                    type="button"
+                    class="filtro-categoria ativo"
+                    data-categoria=""
+                >
+                    Todos
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro-categoria"
+                    data-categoria="Livros"
+                >
+                    Livros
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro-categoria"
+                    data-categoria="Engenharia"
+                >
+                    Engenharia
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro-categoria"
+                    data-categoria="Computação"
+                >
+                    Computação
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro-categoria"
+                    data-categoria="Eletrônica"
+                >
+                    Eletrônica
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro-categoria"
+                    data-categoria="Materiais Acadêmicos"
+                >
+                    Materiais Acadêmicos
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro-categoria"
+                    data-categoria="Outros"
+                >
+                    Outros
+                </button>
+
+            </div>
+
+            <div
+                id="lista-anuncios"
+                class="lista-anuncios"
+            ></div>
+
+            <p
+                id="mensagem-vitrine"
+                class="mensagem-vitrine"
+                aria-live="polite"
+            >
+                Carregando anúncios...
+            </p>
+
+        </section>
+
     </main>
+
+    <script
+        src="{{ url_for('static', filename='js/index.js') }}"
+    ></script>
+
 </body>
+
 </html>
