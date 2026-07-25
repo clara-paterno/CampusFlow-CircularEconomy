@@ -1,10 +1,17 @@
+import os
+from uuid import uuid4
+
 from datetime import datetime, timezone
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 
-
 app = Flask(__name__)
+
+app.config["SECRET_KEY"] = os.environ.get(
+    "SECRET_KEY",
+    "chave-temporaria-apenas-para-desenvolvimento"
+)
 
 # Para que o Json identifique acentuação
 app.json.ensure_ascii = False
@@ -15,6 +22,14 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Cria a conexão entre o Flask e o banco
 db = SQLAlchemy(app)
+
+
+# função responsável por identificar a sessão do navegador
+# caso não haja uma chave, ele gera uma e armazena na sessão
+@app.before_request
+def identificar_usuario():
+    if "usuario_id" not in session:
+        session["usuario_id"] = str(uuid4())
 
 # Modelo/classe anúncio
 class Anuncio(db.Model):
@@ -54,9 +69,8 @@ class Anuncio(db.Model):
     )
 
     usuario_id = db.Column(
-        db.Integer,
-        nullable=False,
-        default=1
+        db.String(36),
+        nullable=False
     )
 
     criado_em = db.Column(
@@ -75,6 +89,11 @@ def pagina_inicial():
 @app.route("/cadastrar")
 def pagina_cadastrar():
     return render_template("cadastrar.html")
+
+# Redireciona para a página de meus anúncios
+@app.route("/meus-anuncios")
+def pagina_meus_anuncios():
+    return render_template("meus_anuncios.html")
 
 #endregion
 
@@ -123,6 +142,9 @@ def criar_anuncio():
     if doacao:
         preco = None
 
+    # Recupera o identificador criado para a sessão
+    usuario_id = session["usuario_id"]
+
     try:
         novo_anuncio = Anuncio(
             titulo=dados["titulo"].strip(),
@@ -131,7 +153,7 @@ def criar_anuncio():
             preco=preco,
             doacao=doacao,
             imagem_url=dados.get("imagem_url"),
-            usuario_id=dados.get("usuario_id", 1)
+            usuario_id=usuario_id
         )
 
         db.session.add(novo_anuncio)
@@ -207,6 +229,46 @@ def listar_anuncios():
     return jsonify({
         "quantidade": len(resultado),
         "categoria": categoria,
+        "anuncios": resultado
+    }), 200
+
+#endregion
+
+#region GET MEUS 
+
+@app.route("/api/anuncios/meus", methods=["GET"])
+def listar_meus_anuncios():
+    usuario_id = session["usuario_id"]
+
+    consulta = Anuncio.query.filter_by(
+        usuario_id=usuario_id
+    )
+
+    anuncios = consulta.order_by(
+        Anuncio.criado_em.desc()
+    ).all()
+
+    resultado = []
+
+    for anuncio in anuncios:
+        resultado.append({
+            "id": anuncio.id,
+            "titulo": anuncio.titulo,
+            "descricao": anuncio.descricao,
+            "categoria": anuncio.categoria,
+            "preco": (
+                float(anuncio.preco)
+                if anuncio.preco is not None
+                else None
+            ),
+            "doacao": anuncio.doacao,
+            "imagem_url": anuncio.imagem_url,
+            "usuario_id": anuncio.usuario_id,
+            "criado_em": anuncio.criado_em.isoformat()
+        })
+
+    return jsonify({
+        "quantidade": len(resultado),
         "anuncios": resultado
     }), 200
 
