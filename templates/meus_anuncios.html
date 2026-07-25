@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Meus anúncios | CampusFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="pagina-meus-anuncios">
+
+    <header class="cabecalho-meus-anuncios">
+
+        <a
+            href="{{ url_for('pagina_inicial') }}"
+            class="logo-meus-anuncios"
+        >
+            <span>♻</span>
+            <strong>CampusFlow</strong>
+        </a>
+
+        <a
+            href="{{ url_for('pagina_inicial') }}"
+            class="link-voltar-meus-anuncios"
+        >
+            ← Voltar para o início
+        </a>
+
+    </header>
+
+    <main class="conteudo-meus-anuncios">
+
+        <section class="secao-meus-anuncios">
+
+            <div class="cabecalho-listagem">
+
+                <div>
+                    <span class="etiqueta-meus-anuncios">
+                        Área pessoal
+                    </span>
+
+                    <h1>Meus anúncios</h1>
+
+                    <p>
+                        Gerencie os itens que você publicou no CampusFlow.
+                    </p>
+                </div>
+
+                <a
+                    href="{{ url_for('pagina_cadastrar') }}"
+                    class="botao-novo-anuncio"
+                >
+                    + Anunciar novo item
+                </a>
+
+            </div>
+
+            <div class="resumo-meus-anuncios">
+
+                <p>
+                    Você possui
+                    <strong id="quantidade-meus-anuncios">0</strong>
+                    anúncios cadastrados.
+                </p>
+
+            </div>
+
+            <div
+                id="lista-meus-anuncios"
+                class="lista-meus-anuncios"
+            ></div>
+
+            <div
+                id="estado-vazio-meus-anuncios"
+                class="estado-vazio-meus-anuncios"
+                hidden
+            >
+                <div class="icone-estado-vazio">
+                    ♻
+                </div>
+
+                <h2>Você ainda não possui anúncios</h2>
+
+                <p>
+                    Cadastre seu primeiro item para venda ou doação
+                    dentro da comunidade universitária.
+                </p>
+
+                <a
+                    href="{{ url_for('pagina_cadastrar') }}"
+                    class="botao-primeiro-anuncio"
+                >
+                    Criar primeiro anúncio
+                </a>
+            </div>
+
+            <p
+                id="mensagem-meus-anuncios"
+                class="mensagem-meus-anuncios"
+                aria-live="polite"
+            >
+                Carregando seus anúncios...
+            </p>
+
+        </section>
+
+    </main>
+
+    <script
+        src="{{ url_for('static', filename='js/meus_anuncios.js') }}"
+    ></script>
+
+</body>
+
+</html>
