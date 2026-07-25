@@ -13,8 +13,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Cria a conexão entre o Flask e o banco
 db = SQLAlchemy(app)
 
-
-# Modelo que representa a tabela de anúncios
+# Modelo/classe anúncio
 class Anuncio(db.Model):
     __tablename__ = "anuncios"
 
@@ -62,8 +61,8 @@ class Anuncio(db.Model):
         nullable=False,
         default=lambda: datetime.now(timezone.utc)
     )
-
-
+#region PAGES
+# Landing page do projeto 
 @app.route("/")
 def pagina_inicial():
     return render_template("index.html")
@@ -73,12 +72,14 @@ def pagina_inicial():
 def pagina_sobre():
     return "Esta é a página sobre o projeto de Economia Circular."
 
-
+# Redireciona para a página de cadastro do produto
 @app.route("/cadastrar")
 def pagina_cadastrar():
     return render_template("cadastrar.html")
 
+#endregion
 
+# region POST
 @app.route("/api/anuncios", methods=["POST"])
 def criar_anuncio():
     dados = request.get_json(silent=True)
@@ -163,7 +164,9 @@ def criar_anuncio():
             "erro": "Não foi possível cadastrar o anúncio."
         }), 500
 
+#endregion
 
+#region GET
 @app.route("/api/anuncios", methods=["GET"])
 def listar_anuncios():
     categoria = request.args.get("categoria")
@@ -208,7 +211,9 @@ def listar_anuncios():
         "anuncios": resultado
     }), 200
 
+#endregion
 
+#region DELETE
 @app.route("/api/anuncios/<int:anuncio_id>", methods=["DELETE"])
 def excluir_anuncio(anuncio_id):
     anuncio = db.session.get(Anuncio,anuncio_id)
@@ -234,7 +239,9 @@ def excluir_anuncio(anuncio_id):
             "erro": "Não foi possível excluir o anúncio."
         }), 500
     
+#endregion
 
+#region PATCH
 @app.route("/api/anuncios/<int:anuncio_id>", methods=["PATCH"])
 def atualizar_anuncio(anuncio_id):
     anuncio = db.session.get(Anuncio, anuncio_id)
@@ -358,12 +365,14 @@ def atualizar_anuncio(anuncio_id):
         return jsonify({
             "erro": "Não foi possível atualizar o anúncio."
         }), 500
+#endregion
 
-
-
+#region RUN APP
 if __name__ == "__main__":
     # Cria o arquivo do banco e suas tabelas, caso ainda não existam
     with app.app_context():
         db.create_all()
 
     app.run(debug=True)
+
+#endregion
