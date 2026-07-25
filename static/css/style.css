@@ -7,7 +7,7 @@
 
 /* Configurações gerais da página */
 body {
-    background-color: #9aa8c1;
+    background-color: #ffffff;
     color: #252238;
     font-family: Arial, sans-serif;
     padding: 32px;
@@ -16,10 +16,10 @@ body {
 /* Cabeçalho principal */
 .cabecalho {
     width: 100%;
-    max-width: 1300px;
+    max-width: 1500px;
 
     margin: 0 auto;
-    padding: 20px 28px;
+    padding: 0 28px;
 
     background-color: #ffffff;
 
@@ -27,7 +27,6 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    border-radius: 20px 20px 0 0;
 }
 
 /* Logo do projeto */
@@ -56,13 +55,13 @@ body {
 .menu a {
     color: #474358;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
 
     transition: color 0.2s ease;
 }
 
 .menu a:hover {
-    color: #7668a9;
+    color: #5a97e1;
 }
 
 /* Botão de anunciar */
@@ -83,35 +82,40 @@ body {
 }
 
 .botao-anunciar:hover {
-    background-color: #4a416f;
-    transform: translateY(-2px);
+    background-color: #5a97e1;
+    transform: translateY(-3px);
 }
 
 /* Apenas para organizar temporariamente o conteúdo abaixo */
 main {
     width: 100%;
-    max-width: 1300px;
+    max-width: 1500px;
 
     margin: 0 auto;
-    padding: 80px 40px;
+    padding: 80px 28px;
 
     background-color: #ffffff;
 }
 
+
+
 /* ==================================================
    Página de cadastro de anúncio
 ================================================== */
+/*#region CADASTRO*/
 
 .pagina-cadastro {
     min-height: 100vh;
     margin: 0;
-    padding: 40px 24px;
+    padding: 20px 10px;
 
-    background-color: #a7b6cf;
+    background: #ffffff;
     color: #1f2937;
 
     font-family: Arial, Helvetica, sans-serif;
-}
+  
+};
+    
 
 .estrutura-cadastro {
     width: 100%;
@@ -122,14 +126,16 @@ main {
 .cabecalho-cadastro {
     width: 100%;
     min-height: 88px;
-    padding: 0 52px;
+    padding: 0 52px ;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 20x;
 
     background-color: #ffffff;
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.3);
     border-bottom: 1px solid #e5e7eb;
 }
 
@@ -137,12 +143,35 @@ main {
     width: 100%;
     max-width: none;
     margin: 0;
-    padding: 66px 20px 56px;
+    padding: 32px 20px 56px;
 
     display: flex;
     justify-content: center;
 
-    background-color: #ffffff;
+    background:
+        radial-gradient(
+            circle at 12% 78%,
+            #93c5fda6 0%,
+            rgba(147, 197, 253, 0) 34%
+        ),
+        radial-gradient(
+            circle at 88% 18%,
+            rgba(167, 243, 208, 0.7) 0%,
+            rgba(167, 243, 208, 0) 32%
+        ),
+        radial-gradient(
+            circle at 74% 82%,
+            rgba(186, 230, 253, 0.5) 0%,
+            rgba(186, 230, 253, 0) 28%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbff 0%,
+            #f0fdf7 100%
+        );
+
+        border-radius: 0 0 28px 28px ;
+        box-shadow: 0 20px 30px rgba(15, 23, 42, 0.3);
 }
 
 .logo-cadastro {
@@ -167,8 +196,8 @@ main {
 
 .cartao-cadastro {
     width: 100%;
-    max-width: 760px;
-    padding: 40px;
+    max-width: 1300px;
+    padding:35px;
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 24px;
@@ -386,8 +415,585 @@ main {
         padding: 20px 14px 40px;
     }
 
-    .cartao-cadastro {
+    .cartao-cadastro { 
         padding: 26px 20px;
         border-radius: 18px;
     }
 }
+/*#endregion*/
+
+/* ==================================================
+   Seção Como funciona
+================================================== */
+/*#region COMO FUNCIONA*/
+
+.secao-como-funciona {
+    padding: 0 20px;
+    scroll-margin-top: 32px;
+}
+
+
+/* Título e apresentação da proposta */
+
+.cabecalho-como-funciona {
+    margin-bottom: 80px;
+
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    align-items: start;
+    gap: 64px;
+}
+
+.cabecalho-como-funciona h2 {
+    color: #252238;
+
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.05;
+}
+
+.cabecalho-como-funciona p {
+    max-width: 520px;
+
+    color: #252238;
+
+    justify-self: end;
+
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 1.65rem; /* aproximadamente 25px */
+    font-weight: 500;
+
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+}
+
+/* Grade dos três cartões */
+
+.grade-como-funciona {
+    display: grid;
+    grid-template-columns: 1.6fr 0.9fr 0.9fr;
+    gap: 18px;
+}
+
+
+/* Cartão maior com as etapas */
+
+.cartao-processo {
+    min-height: 300px;
+    padding: 30px;
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(158, 205, 253, 0.7),
+            transparent 42%
+        ),
+        linear-gradient(
+            135deg,
+            #eef6ff,
+            #f1fdf7
+        );
+
+    border: 1px solid #dbe5e2;
+    border-radius: 24px;
+}
+
+.etiqueta-processo {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 7px 12px;
+
+    color: #166534;
+    background-color: rgba(220, 252, 231, 0.85);
+
+    border-radius: 999px;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.cartao-processo h3 {
+    max-width: 420px;
+    margin-bottom: 28px;
+
+    color: #252238;
+
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    line-height: 1.15;
+}
+
+
+/* Lista numerada das etapas */
+
+.lista-etapas {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    list-style: none;
+    counter-reset: etapa;
+}
+
+.lista-etapas li {
+    counter-increment: etapa;
+
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    column-gap: 12px;
+}
+
+.lista-etapas li::before {
+    content: counter(etapa);
+
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+    background-color: #29243f;
+
+    border-radius: 50%;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    grid-row: span 2;
+}
+
+.lista-etapas strong {
+    color: #252238;
+    font-size: 0.95rem;
+}
+
+.lista-etapas span {
+    margin-top: 3px;
+
+    color: #666173;
+
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+
+/* Cartões com estatísticas */
+
+.cartao-estatistica {
+    min-height: 300px;
+    padding: 34px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    color: #ffffff;
+    background-color: #29243f;
+
+    border-radius: 24px;
+
+    font-family: "Inter", Arial, sans-serif;
+    text-align: left;
+}
+
+.numero-estatistica {
+    width: 100%;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: clamp(3.8rem, 6vw, 5rem);
+    font-weight: 100;
+    line-height: 1;
+    letter-spacing: -0.05em;
+
+    text-align: left;
+}
+
+.titulo-estatistica {
+    width: 100%;
+    max-width: 190px;
+    margin-top: 28px;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.25;
+
+    text-align: left;
+}
+
+.cartao-estatistica small {
+    width: 100%;
+    margin-top: auto;
+    padding-top: 32px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+
+    text-align: left;
+}
+
+/*#endregion*/
+
+/* ==================================================
+   Landing page e vitrine de anúncios
+================================================== */
+/*#region VITRINE DE ANÚNCIOS*/
+.conteudo-inicial {
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+
+    padding: 40px 0 80px;
+}
+
+.secao-apresentacao {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    min-height: 600px;
+    padding: 80px 60px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at 12% 78%,
+            #93c5fda6 0%,
+            rgba(147, 197, 253, 0) 34%
+        ),
+        radial-gradient(
+            circle at 88% 18%,
+            rgba(167, 243, 208, 0.7) 0%,
+            rgba(167, 243, 208, 0) 32%
+        ),
+        radial-gradient(
+            circle at 74% 82%,
+            rgba(186, 230, 253, 0.5) 0%,
+            rgba(186, 230, 253, 0) 28%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbff 0%,
+            #f0fdf7 100%
+        );
+
+    border-radius: 28px 28px 28px 28px;
+}
+.etiqueta-apresentacao,
+.etiqueta-vitrine {
+    display: inline-block;
+    margin-bottom: 12px;
+
+    color: #5f538d;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.secao-apresentacao h1 {
+    max-width: 720px;
+    margin-bottom: 18px;
+
+    color: #252238;
+
+    font-size: clamp(2.3rem, 6vw, 4.7rem);
+    line-height: 1.02;
+}
+
+.secao-apresentacao p {
+    max-width: 620px;
+    margin-bottom: 28px;
+
+    color: #666173;
+
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.botao-destaque {
+    display: inline-block;
+    padding: 14px 24px;
+
+    color: #ffffff;
+    background-color: #29243f;
+
+    border-radius: 999px;
+
+    text-decoration: none;
+    font-weight: 700;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.botao-destaque:hover {
+    background-color: #5a97e1;
+    transform: translateY(-3px);
+}
+
+
+/* Cabeçalho da vitrine */
+
+.secao-vitrine {
+    padding: 0 20px;
+    scroll-margin-top: 32px;
+}
+
+.cabecalho-vitrine {
+    margin-bottom: 28px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+.cabecalho-vitrine h2 {
+    margin-bottom: 8px;
+
+    color: #252238;
+
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+}
+
+.cabecalho-vitrine p {
+    color: #777283;
+    line-height: 1.6;
+}
+
+.link-novo-anuncio {
+    flex-shrink: 0;
+
+    color: #5a4f84;
+
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.link-novo-anuncio:hover {
+    text-decoration: underline;
+}
+
+
+/* Filtros */
+
+.filtros-categorias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filtro-categoria {
+    padding: 10px 16px;
+
+    color: #555064;
+    background-color: #dcedfd;
+
+    border: 1px solid #ded9e8;
+    border-radius: 999px;
+
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.filtro-categoria:hover,
+.filtro-categoria.ativo {
+    color: #ffffff;
+    background-color: #29243f;
+    border-color: #29243f;
+}
+
+
+/* Lista de anúncios */
+
+.lista-anuncios {
+    margin-top: 28px;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.cartao-anuncio {
+    min-width: 0;
+
+    overflow: hidden;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e5e2eb;
+    border-radius: 18px;
+
+    box-shadow: 0 10px 30px rgba(37, 34, 56, 0.07);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.cartao-anuncio:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(37, 34, 56, 0.12);
+}
+
+.area-imagem-anuncio {
+    width: 100%;
+    height: 210px;
+
+    overflow: hidden;
+
+    background-color: #dcedfd;
+}
+
+.area-imagem-anuncio img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+    object-fit: cover;
+}
+
+.imagem-indisponivel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    font-size: 3.2rem;
+}
+
+.conteudo-cartao-anuncio {
+    padding: 20px;
+}
+
+.categoria-anuncio {
+    display: inline-block;
+    margin-bottom: 10px;
+
+    color: #62558e;
+    background-color: #c8dcf6;;
+
+    padding: 6px 10px;
+    border-radius: 999px;
+
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.conteudo-cartao-anuncio h3 {
+    margin-bottom: 10px;
+
+    color: #252238;
+
+    font-size: 1.15rem;
+    line-height: 1.3;
+}
+
+.descricao-anuncio {
+    min-height: 44px;
+    margin-bottom: 20px;
+
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
+    color: #777283;
+
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.rodape-cartao-anuncio {
+    padding-top: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    border-top: 1px solid #eeeaf2;
+}
+
+.preco-anuncio {
+    color: #252238;
+    font-size: 1.05rem;
+}
+
+.preco-doacao {
+    color: #15803d;
+}
+
+.data-anuncio {
+    color: #96919f;
+    font-size: 0.75rem;
+}
+
+.mensagem-vitrine {
+    min-height: 24px;
+    margin-top: 28px;
+
+    color: #777283;
+    text-align: center;
+}
+
+.mensagem-erro-vitrine {
+    color: #b91c1c;
+}
+
+
+/* Responsividade da vitrine */
+
+@media (max-width: 950px) {
+    .lista-anuncios {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .cabecalho-vitrine {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .lista-anuncios {
+        grid-template-columns: 1fr;
+    }
+
+    .area-imagem-anuncio {
+        height: 230px;
+    }
+}
+
+/*#endregion*/

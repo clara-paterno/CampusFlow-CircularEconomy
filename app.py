@@ -64,16 +64,12 @@ class Anuncio(db.Model):
         nullable=False,
         default=lambda: datetime.now(timezone.utc)
     )
+
 #region PAGES
 # Landing page do projeto 
 @app.route("/")
 def pagina_inicial():
     return render_template("index.html")
-
-
-@app.route("/sobre")
-def pagina_sobre():
-    return "Esta é a página sobre o projeto de Economia Circular."
 
 # Redireciona para a página de cadastro do produto
 @app.route("/cadastrar")
