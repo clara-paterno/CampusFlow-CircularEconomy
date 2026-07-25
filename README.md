@@ -26,8 +26,3 @@ CampusFlow is a circular economy marketplace designed for university students to
 - Filter listings
 - Product registration page
 
-## Running Locally
-
-```bash
-python -m venv .venv
-```
