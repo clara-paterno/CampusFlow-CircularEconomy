@@ -1441,3 +1441,114 @@ main {
     }
 }
 /*#endregion*/
+
+/*#region MOBILE*/
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 0;
+    }
+
+    /* Cabeçalho */
+    .cabecalho {
+        max-width: none;
+        padding: 16px 18px;
+
+        flex-wrap: wrap;
+        gap: 14px;
+
+        border-radius: 0;
+    }
+
+    .cabecalho nav {
+        width: 100%;
+
+        order: 3;
+
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .cabecalho nav a {
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    /* Conteúdo principal */
+    main {
+        max-width: none;
+        padding: 16px 18px 60px;
+    }
+
+    .conteudo-inicial {
+        gap: 56px;
+    }
+
+    /* Hero */
+    .secao-apresentacao {
+        min-height: auto;
+        padding: 64px 24px;
+
+        border-radius: 24px;
+    }
+
+    .secao-apresentacao h1 {
+        font-size: clamp(2.2rem, 11vw, 3rem);
+        line-height: 1;
+    }
+
+    .secao-apresentacao p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* Como funciona */
+    .secao-como-funciona {
+        padding: 0;
+    }
+
+    .cabecalho-como-funciona {
+        margin-bottom: 36px;
+
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .cabecalho-como-funciona h2 {
+        font-size: 2.2rem;
+    }
+
+    .cabecalho-como-funciona p {
+        width: 100%;
+        max-width: none;
+
+        justify-self: start;
+
+        font-size: 1.05rem;
+        line-height: 1.4;
+        letter-spacing: -0.02em;
+    }
+
+    /* Cards da seção Como funciona */
+    .grade-como-funciona {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    /* Vitrine */
+    .secao-vitrine {
+        padding: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .pagina-inicial main {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}
+
+/*#endregion*/
+
