@@ -37,6 +37,49 @@ function mostrarImagemPadrao(areaImagem) {
     areaImagem.textContent = "♻";
 }
 
+/*
+ * Exclui um anúncio pertencente à sessão atual.
+ */
+async function excluirAnuncio(anuncioId) {
+    const confirmouExclusao = window.confirm(
+        "Tem certeza de que deseja excluir este anúncio?"
+    );
+
+    if (!confirmouExclusao) {
+        return;
+    }
+
+    try {
+        const resposta = await fetch(
+            `/api/anuncios/${anuncioId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const resultado = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(
+                resultado.erro ||
+                "Não foi possível excluir o anúncio."
+            );
+        }
+
+        mensagemMeusAnuncios.textContent =
+            resultado.mensagem;
+
+        await carregarMeusAnuncios();
+
+    } catch (erro) {
+        mensagemMeusAnuncios.textContent = erro.message;
+
+        console.error(
+            "Erro ao excluir anúncio:",
+            erro
+        );
+    }
+}
 
 /*
  * Cria um card HTML usando os dados de um anúncio.
@@ -134,6 +177,9 @@ function criarCardMeuAnuncio(anuncio) {
 
     botaoExcluir.dataset.anuncioId = anuncio.id;
 
+    botaoExcluir.addEventListener("click", () => {
+    excluirAnuncio(anuncio.id);
+    });
 
     // Montagem da área de ações
     acoes.append(
