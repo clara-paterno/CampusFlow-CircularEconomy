@@ -49,24 +49,21 @@ Necessidade de manter a identificação do mesmo navegador entre diferentes aces
 
 ### Prompt utilizado
 
-```text
-Implementei no Flask uma identificação anônima por navegador usando uma chave armazenada na sessão. Cada navegador recebe um `usuario_id` diferente, e esse identificador é associado aos anúncios cadastrados. A página “Meus anúncios” filtra os registros com base no `usuario_id` da sessão atual.
-
-Durante os testes, os anúncios apareceram corretamente no mesmo navegador. Porém, ao fechar a aplicação e acessá-la novamente no dia seguinte, a página “Meus anúncios” ficou vazia, apesar de os registros continuarem no banco de dados. Isso indica que um novo `usuario_id` pode estar sendo gerado.
-
-Como posso garantir que o mesmo navegador mantenha o mesmo identificador entre diferentes acessos e reinicializações da aplicação?
-
-Analise possíveis causas, como:
-
-* sessão não configurada como permanente;
-* expiração ou remoção do cookie;
-* alteração da `SECRET_KEY` ao reiniciar o Flask;
-* geração de um novo identificador a cada requisição ou execução;
-* configurações de duração e persistência da sessão.
-
-Explique a solução mais simples e adequada ao escopo do projeto antes de apresentar alterações no código.
-
-```
+> Implementei no Flask uma identificação anônima por navegador usando uma chave armazenada na sessão. Cada navegador recebe um `usuario_id` diferente, e esse identificador é associado aos anúncios cadastrados. A página “Meus anúncios” filtra os registros com base no `usuario_id` da sessão atual.
+>
+> Durante os testes, os anúncios apareceram corretamente no mesmo navegador. Porém, ao fechar a aplicação e acessá-la novamente no dia seguinte, a página “Meus anúncios” ficou vazia, apesar de os registros continuarem no banco de dados. Isso indica que um novo `usuario_id` pode estar sendo gerado.
+>
+> Como posso garantir que o mesmo navegador mantenha o mesmo identificador entre diferentes acessos e reinicializações da aplicação?
+>
+> Analise possíveis causas, como:
+>
+> - sessão não configurada como permanente;
+> - expiração ou remoção do cookie;
+> - alteração da `SECRET_KEY` ao reiniciar o Flask;
+> - geração de um novo identificador a cada requisição ou execução;
+> - configurações de duração e persistência da sessão.
+>
+> Explique a solução mais simples e adequada ao escopo do projeto antes de apresentar alterações no código.
 
 ### Aplicação da resposta
 
