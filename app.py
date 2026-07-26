@@ -277,7 +277,10 @@ def listar_meus_anuncios():
 #region DELETE
 @app.route("/api/anuncios/<int:anuncio_id>", methods=["DELETE"])
 def excluir_anuncio(anuncio_id):
-    anuncio = db.session.get(Anuncio,anuncio_id)
+    anuncio = Anuncio.query.filter_by(
+    id=anuncio_id,
+    usuario_id=session["usuario_id"]
+    ).first()
 
     if anuncio is None:
         return jsonify({
@@ -305,7 +308,10 @@ def excluir_anuncio(anuncio_id):
 #region PATCH
 @app.route("/api/anuncios/<int:anuncio_id>", methods=["PATCH"])
 def atualizar_anuncio(anuncio_id):
-    anuncio = db.session.get(Anuncio, anuncio_id)
+    anuncio = Anuncio.query.filter_by(
+        id=anuncio_id,
+        usuario_id=session["usuario_id"]
+    ).first()
 
     if anuncio is None:
         return jsonify({
@@ -326,7 +332,6 @@ def atualizar_anuncio(anuncio_id):
         "preco",
         "doacao",
         "imagem_url",
-        "usuario_id"
     }
 
     campos_enviados = set(dados.keys())
@@ -369,8 +374,6 @@ def atualizar_anuncio(anuncio_id):
     if "imagem_url" in dados:
         anuncio.imagem_url = dados["imagem_url"]
 
-    if "usuario_id" in dados:
-        anuncio.usuario_id = dados["usuario_id"]
 
     if "preco" in dados:
         preco = dados["preco"]
@@ -397,6 +400,103 @@ def atualizar_anuncio(anuncio_id):
         return jsonify({
             "erro": "Itens que não são doação precisam ter um preço."
         }), 400
+
+    # Começa com os valores atuais do anúncio
+    titulo_novo = anuncio.titulo
+    descricao_nova = anuncio.descricao
+    categoria_nova = anuncio.categoria
+    preco_novo = anuncio.preco
+    doacao_nova = anuncio.doacao
+    imagem_url_nova = anuncio.imagem_url
+
+
+    # Validação dos campos de texto
+    if "titulo" in dados:
+        titulo = dados["titulo"]
+
+        if not isinstance(titulo, str) or not titulo.strip():
+            return jsonify({
+                "erro": "O campo 'titulo' não pode ficar vazio."
+            }), 400
+
+        titulo_novo = titulo.strip()
+
+
+    if "descricao" in dados:
+        descricao = dados["descricao"]
+
+        if not isinstance(descricao, str) or not descricao.strip():
+            return jsonify({
+                "erro": "O campo 'descricao' não pode ficar vazio."
+            }), 400
+
+        descricao_nova = descricao.strip()
+
+
+    if "categoria" in dados:
+        categoria = dados["categoria"]
+
+        if not isinstance(categoria, str) or not categoria.strip():
+            return jsonify({
+                "erro": "O campo 'categoria' não pode ficar vazio."
+            }), 400
+
+        categoria_nova = categoria.strip()
+
+
+    # Validação do campo doacao
+    if "doacao" in dados:
+        if not isinstance(dados["doacao"], bool):
+            return jsonify({
+                "erro": "O campo 'doacao' deve ser true ou false."
+            }), 400
+
+        doacao_nova = dados["doacao"]
+
+
+    # Validação do preço
+    if "preco" in dados:
+        preco = dados["preco"]
+
+        if preco is not None:
+            if isinstance(preco, bool) or not isinstance(
+                preco,
+                (int, float)
+            ):
+                return jsonify({
+                    "erro": "O preço deve ser um número."
+                }), 400
+
+            if preco < 0:
+                return jsonify({
+                    "erro": "O preço não pode ser negativo."
+                }), 400
+
+        preco_novo = preco
+
+
+    # Atualização temporária da imagem
+    if "imagem_url" in dados:
+        imagem_url_nova = dados["imagem_url"]
+
+
+    # Verifica a combinação final entre doação e preço
+    if doacao_nova:
+        preco_novo = None
+
+    elif preco_novo is None:
+        return jsonify({
+            "erro": "Itens que não são doação precisam ter um preço."
+        }), 400
+
+
+    # Somente agora modifica o objeto do banco
+    anuncio.titulo = titulo_novo
+    anuncio.descricao = descricao_nova
+    anuncio.categoria = categoria_nova
+    anuncio.preco = preco_novo
+    anuncio.doacao = doacao_nova
+    anuncio.imagem_url = imagem_url_nova
 
     try:
         db.session.commit()
