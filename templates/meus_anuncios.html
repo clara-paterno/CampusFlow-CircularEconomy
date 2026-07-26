@@ -83,6 +83,151 @@
 
             </div>
 
+            <section
+    id="painel-edicao-anuncio"
+    class="painel-edicao-anuncio"
+    hidden
+>
+    <div class="cabecalho-edicao-anuncio">
+        <div>
+            <span class="etiqueta-edicao-anuncio">
+                Editando anúncio
+            </span>
+
+            <h2>Atualize as informações do item</h2>
+        </div>
+
+        <button
+            type="button"
+            id="botao-fechar-edicao"
+            class="botao-fechar-edicao"
+            aria-label="Fechar formulário de edição"
+        >
+            ×
+        </button>
+    </div>
+
+    <form id="formulario-edicao-anuncio">
+
+        <!-- Guarda o ID do anúncio que está sendo editado -->
+        <input
+            type="hidden"
+            id="edicao-anuncio-id"
+        >
+
+        <div class="grade-formulario-edicao">
+
+            <div class="grupo-campo-edicao campo-edicao-completo">
+                <label for="edicao-titulo">
+                    Título
+                </label>
+
+                <input
+                    type="text"
+                    id="edicao-titulo"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div class="grupo-campo-edicao campo-edicao-completo">
+                <label for="edicao-descricao">
+                    Descrição
+                </label>
+
+                <textarea
+                    id="edicao-descricao"
+                    rows="4"
+                    required
+                ></textarea>
+            </div>
+
+            <div class="grupo-campo-edicao">
+                <label for="edicao-categoria">
+                    Categoria
+                </label>
+
+                <select
+                    id="edicao-categoria"
+                    required
+                >
+                    <option value="">Selecione</option>
+                    <option value="Livros">Livros</option>
+                    <option value="Engenharia">Engenharia</option>
+                    <option value="Computação">Computação</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+
+            <div
+                id="grupo-preco-edicao"
+                class="grupo-campo-edicao"
+            >
+                <label for="edicao-preco">
+                    Preço
+                </label>
+
+                <input
+                    type="number"
+                    id="edicao-preco"
+                    min="0"
+                    step="0.01"
+                    placeholder="0,00"
+                >
+            </div>
+
+            <div class="grupo-campo-edicao campo-edicao-completo">
+                <label for="edicao-imagem-url">
+                    URL da imagem
+                </label>
+
+                <input
+                    type="url"
+                    id="edicao-imagem-url"
+                    placeholder="https://exemplo.com/imagem.jpg"
+                >
+            </div>
+
+            <div class="campo-edicao-completo">
+                <label class="opcao-doacao-edicao">
+                    <input
+                        type="checkbox"
+                        id="edicao-doacao"
+                    >
+
+                    <span>Este item é para doação</span>
+                </label>
+            </div>
+
+        </div>
+
+        <p
+            id="mensagem-edicao-anuncio"
+            class="mensagem-edicao-anuncio"
+            aria-live="polite"
+        ></p>
+
+        <div class="acoes-formulario-edicao">
+            <button
+                type="button"
+                id="botao-cancelar-edicao"
+                class="botao-cancelar-edicao"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                id="botao-salvar-edicao"
+                class="botao-salvar-edicao"
+            >
+                Salvar alterações
+            </button>
+        </div>
+
+    </form>
+</section>
+
             <div
                 id="lista-meus-anuncios"
                 class="lista-meus-anuncios"
