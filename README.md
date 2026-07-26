@@ -81,6 +81,10 @@ Descreva o que você compreendeu durante o processo.
 
 ### Compartilhamento de histórico
 
+O chat foi essencial para diagnosticar o problema de persistência da sessão e orientar a configuração correta do `usuario_id`, da `SECRET_KEY` e dos cookies. Também auxiliou na implementação do PWA, explicando e guiando a criação do `manifest.json`, dos ícones e do service worker, sempre com testes e adaptações ao projeto.
+
+https://chatgpt.com/share/6a668bd9-9ab0-83e9-8db6-e7f94394d758
+
 ### Reflexão crítica
 
 
