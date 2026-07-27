@@ -1,16 +1,41 @@
 import os
 from uuid import uuid4
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+from dotenv import load_dotenv
 
-from flask import Flask, render_template, request, jsonify, session
+from flask import (
+    Flask,
+    render_template,
+    request,
+    jsonify,
+    session,
+    send_from_directory,
+)
+
 from flask_sqlalchemy import SQLAlchemy
+
+# Carrega as variáveis definidas no arquivo .env
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = os.environ.get(
-    "SECRET_KEY",
-    "chave-temporaria-apenas-para-desenvolvimento"
+secret_key = os.getenv("SECRET_KEY")
+
+if not secret_key:
+    raise RuntimeError(
+        "A variável SECRET_KEY não foi configurada no arquivo .env."
+    )
+
+app.config["SECRET_KEY"] = secret_key
+
+# Configuração da duração e segurança da sessão
+app.config.update(
+    PERMANENT_SESSION_LIFETIME=timedelta(days=180),
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=False,
+    SESSION_REFRESH_EACH_REQUEST=True,
 )
 
 # Para que o Json identifique acentuação
@@ -23,15 +48,17 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Cria a conexão entre o Flask e o banco
 db = SQLAlchemy(app)
 
-
-# função responsável por identificar a sessão do navegador
-# caso não haja uma chave, ele gera uma e armazena na sessão
 @app.before_request
 def identificar_usuario():
+    # Faz o cookie permanecer após o navegador ser fechado
+    session.permanent = True
+
+    # Gera o identificador apenas no primeiro acesso
     if "usuario_id" not in session:
         session["usuario_id"] = str(uuid4())
 
 # Modelo/classe anúncio
+#region ANUNCIO
 class Anuncio(db.Model):
     __tablename__ = "anuncios"
 
