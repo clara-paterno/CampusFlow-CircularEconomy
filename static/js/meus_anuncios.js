@@ -15,6 +15,63 @@ const mensagemMeusAnuncios = document.getElementById(
     "mensagem-meus-anuncios"
 );
 
+//elementos pra edição
+const painelEdicao = document.getElementById(
+    "painel-edicao-anuncio"
+);
+
+const formularioEdicao = document.getElementById(
+    "formulario-edicao-anuncio"
+);
+
+const campoEdicaoId = document.getElementById(
+    "edicao-anuncio-id"
+);
+
+const campoEdicaoTitulo = document.getElementById(
+    "edicao-titulo"
+);
+
+const campoEdicaoDescricao = document.getElementById(
+    "edicao-descricao"
+);
+
+const campoEdicaoCategoria = document.getElementById(
+    "edicao-categoria"
+);
+
+const campoEdicaoPreco = document.getElementById(
+    "edicao-preco"
+);
+
+const campoEdicaoImagemUrl = document.getElementById(
+    "edicao-imagem-url"
+);
+
+const campoEdicaoDoacao = document.getElementById(
+    "edicao-doacao"
+);
+
+const grupoPrecoEdicao = document.getElementById(
+    "grupo-preco-edicao"
+);
+
+const botaoCancelarEdicao = document.getElementById(
+    "botao-cancelar-edicao"
+);
+
+const botaoFecharEdicao = document.getElementById(
+    "botao-fechar-edicao"
+);
+
+const botaoSalvarEdicao = document.getElementById(
+    "botao-salvar-edicao"
+);
+
+const mensagemEdicao = document.getElementById(
+    "mensagem-edicao-anuncio"
+);
+
 
 /*
  * Converte para o formato monetário brasileiro.
@@ -23,7 +80,27 @@ function formatarPreco(preco) {
     return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL"
-    }).format(preco);
+    }).format(preco);    
+}
+
+
+function atualizarCampoPrecoEdicao() {
+    const ehDoacao = campoEdicaoDoacao.checked;
+
+    grupoPrecoEdicao.hidden = ehDoacao;
+    campoEdicaoPreco.disabled = ehDoacao;
+
+    if (ehDoacao) {
+        campoEdicaoPreco.value = "";
+    }
+}
+
+function fecharFormularioEdicao() {
+    painelEdicao.hidden = true;
+    formularioEdicao.reset();
+
+    campoEdicaoId.value = "";
+    mensagemEdicao.textContent = "";
 }
 
 
@@ -36,6 +113,123 @@ function mostrarImagemPadrao(areaImagem) {
     areaImagem.replaceChildren();
     areaImagem.textContent = "♻";
 }
+
+/*
+ * Edita um anúncio pertencente à sessão atual.
+ */
+function abrirFormularioEdicao(anuncio) {
+    campoEdicaoId.value = anuncio.id;
+    campoEdicaoTitulo.value = anuncio.titulo;
+    campoEdicaoDescricao.value = anuncio.descricao;
+    campoEdicaoCategoria.value = anuncio.categoria;
+
+    campoEdicaoImagemUrl.value =
+        anuncio.imagem_url || "";
+
+    campoEdicaoDoacao.checked =
+        anuncio.doacao === true;
+
+    if (anuncio.preco !== null) {
+        campoEdicaoPreco.value = anuncio.preco;
+    } else {
+        campoEdicaoPreco.value = "";
+    }
+
+    atualizarCampoPrecoEdicao();
+    
+
+    mensagemEdicao.textContent = "";
+
+    painelEdicao.hidden = false;
+
+    painelEdicao.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+formularioEdicao.addEventListener(
+    "submit",
+    async (evento) => {
+        evento.preventDefault();
+
+        const anuncioId = campoEdicaoId.value;
+        const ehDoacao = campoEdicaoDoacao.checked;
+
+        if (!ehDoacao && campoEdicaoPreco.value === "") {
+            mensagemEdicao.textContent =
+                "Informe o preço ou marque o item como doação.";
+
+            return;
+        }
+
+        const dadosAtualizados = {
+            titulo: campoEdicaoTitulo.value.trim(),
+            descricao: campoEdicaoDescricao.value.trim(),
+            categoria: campoEdicaoCategoria.value,
+
+            preco: ehDoacao
+                ? null
+                : Number(campoEdicaoPreco.value),
+
+            doacao: ehDoacao,
+
+            imagem_url:
+                campoEdicaoImagemUrl.value.trim() || null
+        };
+
+        botaoSalvarEdicao.disabled = true;
+        botaoSalvarEdicao.textContent = "Salvando...";
+
+        mensagemEdicao.textContent = "";
+
+        try {
+            const resposta = await fetch(
+                `/api/anuncios/${anuncioId}`,
+                {
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(dadosAtualizados)
+                }
+            );
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(
+                    resultado.erro ||
+                    "Não foi possível atualizar o anúncio."
+                );
+            }
+
+            mensagemEdicao.textContent =
+                "Anúncio atualizado com sucesso.";
+
+            await carregarMeusAnuncios();
+
+            setTimeout(() => {
+                fecharFormularioEdicao();
+            }, 700);
+
+        } catch (erro) {
+            mensagemEdicao.textContent = erro.message;
+
+            console.error(
+                "Erro ao atualizar anúncio:",
+                erro
+            );
+
+        } finally {
+            botaoSalvarEdicao.disabled = false;
+            botaoSalvarEdicao.textContent =
+                "Salvar alterações";
+        }
+    }
+);
 
 /*
  * Exclui um anúncio pertencente à sessão atual.
@@ -161,6 +355,10 @@ function criarCardMeuAnuncio(anuncio) {
     botaoEditar.classList.add("botao-editar-anuncio");
     botaoEditar.textContent = "Editar";
 
+    botaoEditar.addEventListener("click", () => {
+    abrirFormularioEdicao(anuncio);
+    });
+
     /*
      * Guardamos o ID no próprio botão.
      * Ele será utilizado quando implementarmos a edição.
@@ -272,5 +470,29 @@ async function carregarMeusAnuncios() {
         );
     }
 }
+
+/*
+ * Atualiza a exibição do campo de preço
+ * quando o usuário marca ou desmarca a doação.
+ */
+campoEdicaoDoacao.addEventListener(
+    "change",
+    atualizarCampoPrecoEdicao
+);
+
+/* Fecha o formulário quando o usuário botão Cancelar.*/
+botaoCancelarEdicao.addEventListener(
+    "click",
+    fecharFormularioEdicao
+);
+
+/*
+ * Fecha o formulário quando o usuário
+ * clica no botão X.
+ */
+botaoFecharEdicao.addEventListener(
+    "click",
+    fecharFormularioEdicao
+);
 
 carregarMeusAnuncios();
