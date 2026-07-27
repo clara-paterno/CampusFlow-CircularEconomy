@@ -379,14 +379,7 @@ Também foi identificada a necessidade de disponibilizar o Service Worker por um
 
 ```text
 /service-worker.js
-
-### Compartilhamento de histórico
-
-O chat foi essencial para diagnosticar o problema de persistência da sessão e orientar a configuração do `usuario_id`, da `SECRET_KEY` e dos cookies.
-
-A conversa também auxiliou na implementação da PWA, na criação do `manifest.json`, dos ícones e do Service Worker, além da revisão das rotas, das validações e da estratégia de testes.
-
-[Consultar o histórico público da conversa](https://chatgpt.com/share/6a668bd9-9ab0-83e9-8db6-e7f94394d758)
+```
 
 ### Reflexão crítica
 
@@ -404,15 +397,6 @@ A partir disso, conduzi a IA para uma solução mais adequada ao projeto: mantiv
 
 Esse processo demonstrou que uma resposta gerada por IA não deve ser copiada automaticamente. Ela precisa ser compreendida, testada e adaptada aos requisitos técnicos e de segurança da aplicação.
 
-## Melhorias futuras
-
-- realizar o deploy da aplicação;
-- substituir o SQLite por PostgreSQL em produção;
-- adicionar estratégias de cache ao Service Worker;
-- permitir o envio de imagens em vez de apenas URLs;
-- implementar autenticação completa de usuários;
-- criar testes automatizados para a API.
-
 ### Reflexão crítica
 
 Durante a implementação da identificação anônima dos usuários, percebi que os anúncios deixavam de aparecer na página “Meus anúncios” após o navegador ou a aplicação serem reiniciados. A IA identificou corretamente que o problema poderia estar relacionado à perda da sessão e sugeriu torná-la permanente, configurando `session.permanent` e `PERMANENT_SESSION_LIFETIME`.
@@ -422,3 +406,12 @@ Entretanto, a primeira solução apresentada utilizava uma chave secreta padrão
 Identifiquei essa limitação ao comparar a solução com uma segunda análise mais completa, que recomendava gerar a chave apenas uma vez, armazená-la em um arquivo `.env`, impedir seu versionamento pelo Git e manter o mesmo valor entre as reinicializações da aplicação. Também foi observada a necessidade de validar o `usuario_id` nas operações de edição e exclusão, evitando que um anúncio fosse alterado apenas por meio de seu identificador numérico.
 
 A partir disso, conduzi a IA para uma solução mais adequada ao projeto: mantive a sessão permanente para preservar a identificação do navegador, mas substituí a chave inserida diretamente no código por uma variável de ambiente e considerei controles adicionais de autorização. Esse processo mostrou que a resposta inicial da IA não deveria ser copiada automaticamente, mas analisada, testada e adaptada ao contexto e aos requisitos de segurança da aplicação.
+
+## Melhorias futuras
+
+- realizar o deploy da aplicação;
+- substituir o SQLite por PostgreSQL em produção;
+- adicionar estratégias de cache ao Service Worker;
+- permitir o envio de imagens em vez de apenas URLs;
+- implementar autenticação completa de usuários;
+- criar testes automatizados para a API.
