@@ -631,6 +631,29 @@ def atualizar_anuncio(anuncio_id):
 
 #endregion
 
+#region TRATAMENTO DE ERROS HTTP
+
+@app.errorhandler(404)
+def tratar_erro_404(erro):
+    if request.path.startswith("/api/"):
+        return jsonify({
+            "erro": "Rota da API não encontrada."
+        }), 404
+
+    return erro.get_response()
+
+
+@app.errorhandler(405)
+def tratar_erro_405(erro):
+    if request.path.startswith("/api/"):
+        return jsonify({
+            "erro": "Método HTTP não permitido para esta rota."
+        }), 405
+
+    return erro.get_response()
+
+#endregion
+
 #region RUN APP
 if __name__ == "__main__":
     # Cria o arquivo do banco e suas tabelas, caso ainda não existam
