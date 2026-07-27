@@ -30,6 +30,118 @@ O CampusFlow é um marketplace de economia circular desenvolvido para estudantes
 
 ## Como executar localmente
 
+### Pré-requisitos
+
+Antes de começar, instale:
+
+- [Python](https://www.python.org/downloads/)
+- [Git](https://git-scm.com/downloads)
+
+### 1. Clone o repositório
+
+```bash
+git clone URL_DO_REPOSITORIO
+cd EconomiaCircular
+```
+
+Substitua `URL_DO_REPOSITORIO` pela URL deste repositório no GitHub.
+
+### 2. Crie um ambiente virtual
+
+```bash
+python -m venv .venv
+```
+
+### 3. Ative o ambiente virtual
+
+No Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+No Prompt de Comando do Windows:
+
+```cmd
+.venv\Scripts\activate
+```
+
+No Linux ou macOS:
+
+```bash
+source .venv/bin/activate
+```
+
+Quando o ambiente estiver ativo, o terminal deverá exibir `(.venv)` antes do caminho atual.
+
+### 4. Instale as dependências
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 5. Configure as variáveis de ambiente
+
+Crie o arquivo `.env` a partir do modelo disponibilizado no projeto.
+
+No Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+No Linux ou macOS:
+
+```bash
+cp .env.example .env
+```
+
+Gere uma chave secreta com o comando:
+
+```bash
+python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+Copie o valor gerado e substitua o conteúdo de `SECRET_KEY` no arquivo `.env`:
+
+```env
+SECRET_KEY=sua_chave_secreta_gerada
+```
+
+O arquivo `.env` contém informações locais e não deve ser enviado ao repositório.
+
+### 6. Execute a aplicação
+
+```bash
+python app.py
+```
+
+Ao executar o projeto pela primeira vez, o Flask criará automaticamente o banco de dados SQLite e suas tabelas.
+
+### 7. Acesse no navegador
+
+Abra:
+
+```text
+http://127.0.0.1:5000
+```
+
+A mesma aplicação Flask disponibiliza a API REST, a Landing Page e as páginas da experiência PWA.
+
+### Encerrando a aplicação
+
+Para interromper o servidor, pressione:
+
+```text
+Ctrl + C
+```
+
+Para sair do ambiente virtual, execute:
+
+```bash
+deactivate
+```
+
 ## Endpoints da API
 
 ## Diário de Bordo da IA
