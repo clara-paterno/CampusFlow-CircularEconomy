@@ -380,6 +380,7 @@ Também foi identificada a necessidade de disponibilizar o Service Worker por um
 ```text
 /service-worker.js
 ```
+</details>
 
 ### Reflexão crítica
 
