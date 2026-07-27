@@ -143,57 +143,119 @@ def disponibilizar_service_worker():
 def criar_anuncio():
     dados = request.get_json(silent=True)
 
-    # Verifica se realmente foi enviado um JSON
-    if dados is None:
+    # O corpo precisa ser um objeto JSON
+    if not isinstance(dados, dict):
         return jsonify({
-            "erro": "A requisição deve conter um JSON válido."
+            "erro": "A requisição deve conter um objeto JSON válido."
         }), 400
 
-    # Campos obrigatórios
-    campos_obrigatorios = ["titulo", "descricao", "categoria"]
+    # Recupera os campos de texto
+    titulo = dados.get("titulo")
+    descricao = dados.get("descricao")
+    categoria = dados.get("categoria")
 
-    campos_ausentes = [
-        campo
-        for campo in campos_obrigatorios
-        if not dados.get(campo)
-    ]
-
-    if campos_ausentes:
+    # Validação do título
+    if not isinstance(titulo, str) or not titulo.strip():
         return jsonify({
-            "erro": "Existem campos obrigatórios não preenchidos.",
-            "campos_ausentes": campos_ausentes
+            "erro": "O campo 'titulo' é obrigatório e deve conter texto."
         }), 400
 
+    titulo = titulo.strip()
+
+    if len(titulo) > 150:
+        return jsonify({
+            "erro": "O título deve possuir no máximo 150 caracteres."
+        }), 400
+
+    # Validação da descrição
+    if not isinstance(descricao, str) or not descricao.strip():
+        return jsonify({
+            "erro": "O campo 'descricao' é obrigatório e deve conter texto."
+        }), 400
+
+    descricao = descricao.strip()
+
+    # Validação da categoria
+    if not isinstance(categoria, str) or not categoria.strip():
+        return jsonify({
+            "erro": "O campo 'categoria' é obrigatório e deve conter texto."
+        }), 400
+
+    categoria = categoria.strip()
+
+    if len(categoria) > 100:
+        return jsonify({
+            "erro": "A categoria deve possuir no máximo 100 caracteres."
+        }), 400
+
+    # Validação do tipo do anúncio
     doacao = dados.get("doacao", False)
-    preco = dados.get("preco")
 
-    # O campo doacao precisa ser verdadeiro ou falso
     if not isinstance(doacao, bool):
         return jsonify({
             "erro": "O campo 'doacao' deve ser true ou false."
         }), 400
 
-    # Se não for doação, o preço é obrigatório
-    if not doacao and preco is None:
-        return jsonify({
-            "erro": "O preço é obrigatório para itens que não são doação."
-        }), 400
+    # Validação do preço
+    preco = dados.get("preco")
 
-    # Se for uma doação, o preço será vazio
     if doacao:
         preco = None
 
-    # Recupera o identificador criado para a sessão
+    else:
+        if preco is None:
+            return jsonify({
+                "erro": (
+                    "O preço é obrigatório para itens "
+                    "que não são doação."
+                )
+            }), 400
+
+        # Em Python, bool também é considerado int.
+        # Por isso, ele precisa ser rejeitado primeiro.
+        if isinstance(preco, bool) or not isinstance(
+            preco,
+            (int, float)
+        ):
+            return jsonify({
+                "erro": "O preço deve ser um número."
+            }), 400
+
+        if preco < 0:
+            return jsonify({
+                "erro": "O preço não pode ser negativo."
+            }), 400
+
+    # Validação da URL da imagem
+    imagem_url = dados.get("imagem_url")
+
+    if imagem_url is not None:
+        if not isinstance(imagem_url, str):
+            return jsonify({
+                "erro": "A URL da imagem deve ser um texto."
+            }), 400
+
+        imagem_url = imagem_url.strip() or None
+
+        if imagem_url is not None and len(imagem_url) > 500:
+            return jsonify({
+                "erro": (
+                    "A URL da imagem deve possuir "
+                    "no máximo 500 caracteres."
+                )
+            }), 400
+
+    # Identificador do navegador atual
     usuario_id = session["usuario_id"]
 
     try:
         novo_anuncio = Anuncio(
-            titulo=dados["titulo"].strip(),
-            descricao=dados["descricao"].strip(),
-            categoria=dados["categoria"].strip(),
+            titulo=titulo,
+            descricao=descricao,
+            categoria=categoria,
             preco=preco,
             doacao=doacao,
-            imagem_url=dados.get("imagem_url"),
+            imagem_url=imagem_url,
             usuario_id=usuario_id
         )
 
@@ -221,6 +283,10 @@ def criar_anuncio():
 
     except Exception:
         db.session.rollback()
+
+        app.logger.exception(
+            "Ocorreu um erro ao cadastrar o anúncio."
+        )
 
         return jsonify({
             "erro": "Não foi possível cadastrar o anúncio."
