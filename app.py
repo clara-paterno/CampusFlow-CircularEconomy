@@ -427,9 +427,9 @@ def atualizar_anuncio(anuncio_id):
 
     dados = request.get_json(silent=True)
 
-    if dados is None:
+    if not isinstance(dados, dict):
         return jsonify({
-            "erro": "A requisição deve conter um JSON válido."
+            "erro": "A requisição deve conter um objeto JSON válido."
         }), 400
 
     campos_permitidos = {
@@ -438,7 +438,7 @@ def atualizar_anuncio(anuncio_id):
         "categoria",
         "preco",
         "doacao",
-        "imagem_url",
+        "imagem_url"
     }
 
     campos_enviados = set(dados.keys())
@@ -453,59 +453,7 @@ def atualizar_anuncio(anuncio_id):
     if campos_invalidos:
         return jsonify({
             "erro": "Um ou mais campos não podem ser atualizados.",
-            "campos_invalidos": list(campos_invalidos)
-        }), 400
-
-    # Validação dos campos de texto
-    for campo in ["titulo", "descricao", "categoria"]:
-        if campo in dados:
-            valor = dados[campo]
-
-            if not isinstance(valor, str) or not valor.strip():
-                return jsonify({
-                    "erro": f"O campo '{campo}' não pode ficar vazio."
-                }), 400
-
-            setattr(anuncio, campo, valor.strip())
-
-    # Validação do campo doacao
-    if "doacao" in dados:
-        if not isinstance(dados["doacao"], bool):
-            return jsonify({
-                "erro": "O campo 'doacao' deve ser true ou false."
-            }), 400
-
-        anuncio.doacao = dados["doacao"]
-
-    # Atualiza os demais campos
-    if "imagem_url" in dados:
-        anuncio.imagem_url = dados["imagem_url"]
-
-
-    if "preco" in dados:
-        preco = dados["preco"]
-
-        if preco is not None:
-            if not isinstance(preco, (int, float)):
-                return jsonify({
-                    "erro": "O preço deve ser um número."
-                }), 400
-
-            if preco < 0:
-                return jsonify({
-                    "erro": "O preço não pode ser negativo."
-                }), 400
-
-        anuncio.preco = preco
-
-    # Doações não possuem preço
-    if anuncio.doacao:
-        anuncio.preco = None
-
-    # Itens à venda precisam ter preço
-    if not anuncio.doacao and anuncio.preco is None:
-        return jsonify({
-            "erro": "Itens que não são doação precisam ter um preço."
+            "campos_invalidos": sorted(campos_invalidos)
         }), 400
 
     # Começa com os valores atuais do anúncio
@@ -516,50 +464,75 @@ def atualizar_anuncio(anuncio_id):
     doacao_nova = anuncio.doacao
     imagem_url_nova = anuncio.imagem_url
 
-
-    # Validação dos campos de texto
+    # Validação do título
     if "titulo" in dados:
         titulo = dados["titulo"]
 
         if not isinstance(titulo, str) or not titulo.strip():
             return jsonify({
-                "erro": "O campo 'titulo' não pode ficar vazio."
+                "erro": (
+                    "O campo 'titulo' é obrigatório "
+                    "e deve conter texto."
+                )
             }), 400
 
-        titulo_novo = titulo.strip()
+        titulo = titulo.strip()
 
+        if len(titulo) > 150:
+            return jsonify({
+                "erro": "O título deve possuir no máximo 150 caracteres."
+            }), 400
 
+        titulo_novo = titulo
+
+    # Validação da descrição
     if "descricao" in dados:
         descricao = dados["descricao"]
 
         if not isinstance(descricao, str) or not descricao.strip():
             return jsonify({
-                "erro": "O campo 'descricao' não pode ficar vazio."
+                "erro": (
+                    "O campo 'descricao' é obrigatório "
+                    "e deve conter texto."
+                )
             }), 400
 
         descricao_nova = descricao.strip()
 
-
+    # Validação da categoria
     if "categoria" in dados:
         categoria = dados["categoria"]
 
         if not isinstance(categoria, str) or not categoria.strip():
             return jsonify({
-                "erro": "O campo 'categoria' não pode ficar vazio."
+                "erro": (
+                    "O campo 'categoria' é obrigatório "
+                    "e deve conter texto."
+                )
             }), 400
 
-        categoria_nova = categoria.strip()
+        categoria = categoria.strip()
 
+        if len(categoria) > 100:
+            return jsonify({
+                "erro": (
+                    "A categoria deve possuir "
+                    "no máximo 100 caracteres."
+                )
+            }), 400
 
-    # Validação do campo doacao
+        categoria_nova = categoria
+
+    # Validação do campo de doação
     if "doacao" in dados:
-        if not isinstance(dados["doacao"], bool):
+        doacao = dados["doacao"]
+
+        if not isinstance(doacao, bool):
             return jsonify({
                 "erro": "O campo 'doacao' deve ser true ou false."
             }), 400
 
-        doacao_nova = dados["doacao"]
-
+        doacao_nova = doacao
 
     # Validação do preço
     if "preco" in dados:
@@ -581,11 +554,27 @@ def atualizar_anuncio(anuncio_id):
 
         preco_novo = preco
 
-
-    # Atualização temporária da imagem
+    # Validação da URL da imagem
     if "imagem_url" in dados:
-        imagem_url_nova = dados["imagem_url"]
+        imagem_url = dados["imagem_url"]
 
+        if imagem_url is not None:
+            if not isinstance(imagem_url, str):
+                return jsonify({
+                    "erro": "A URL da imagem deve ser um texto."
+                }), 400
+
+            imagem_url = imagem_url.strip() or None
+
+            if imagem_url is not None and len(imagem_url) > 500:
+                return jsonify({
+                    "erro": (
+                        "A URL da imagem deve possuir "
+                        "no máximo 500 caracteres."
+                    )
+                }), 400
+
+        imagem_url_nova = imagem_url
 
     # Verifica a combinação final entre doação e preço
     if doacao_nova:
@@ -593,11 +582,13 @@ def atualizar_anuncio(anuncio_id):
 
     elif preco_novo is None:
         return jsonify({
-            "erro": "Itens que não são doação precisam ter um preço."
+            "erro": (
+                "Itens que não são doação "
+                "precisam ter um preço."
+            )
         }), 400
 
-
-    # Somente agora modifica o objeto do banco
+    # Somente após todas as validações o objeto é alterado
     anuncio.titulo = titulo_novo
     anuncio.descricao = descricao_nova
     anuncio.categoria = categoria_nova
@@ -630,9 +621,14 @@ def atualizar_anuncio(anuncio_id):
     except Exception:
         db.session.rollback()
 
+        app.logger.exception(
+            "Ocorreu um erro ao atualizar o anúncio."
+        )
+
         return jsonify({
             "erro": "Não foi possível atualizar o anúncio."
         }), 500
+
 #endregion
 
 #region RUN APP
