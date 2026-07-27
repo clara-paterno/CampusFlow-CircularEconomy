@@ -78,7 +78,6 @@ formulario.addEventListener("submit", async (evento) => {
             : Number(campoPreco.value),
         doacao: ehDoacao,
         imagem_url: campoImagemUrl.value.trim() || null,
-        usuario_id: 1
     };
 
     try {
