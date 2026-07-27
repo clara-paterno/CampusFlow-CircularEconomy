@@ -40,11 +40,9 @@ Antes de começar, instale:
 ### 1. Clone o repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/clara-paterno/CampusFlow-CircularEconomy
 cd EconomiaCircular
 ```
-
-Substitua `URL_DO_REPOSITORIO` pela URL deste repositório no GitHub.
 
 ### 2. Crie um ambiente virtual
 
