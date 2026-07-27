@@ -12,6 +12,16 @@
     <title>Meus anúncios | CampusFlow</title>
 
     <link
+        rel="manifest"
+        href="{{ url_for('static', filename='manifest.json') }}"
+    >
+
+    <meta
+        name="theme-color"
+        content="#29243f"
+    >
+
+    <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}"
     >
@@ -149,13 +159,36 @@
 
                 <select
                     id="edicao-categoria"
+                    name="categoria"
                     required
                 >
-                    <option value="">Selecione</option>
-                    <option value="Livros">Livros</option>
-                    <option value="Engenharia">Engenharia</option>
-                    <option value="Computação">Computação</option>
-                    <option value="Outros">Outros</option>
+                    <option value="" selected disabled>
+                                    Selecione uma categoria
+                                </option>
+
+                                <option value="Livros">
+                                    Livros
+                                </option>
+
+                                <option value="Engenharia">
+                                    Engenharia
+                                </option>
+
+                                <option value="Computação">
+                                    Computação
+                                </option>
+
+                                <option value="Eletrônica">
+                                    Eletrônica
+                                </option>
+
+                                <option value="Materiais Acadêmicos">
+                                    Materiais Acadêmicos
+                                </option>
+
+                                <option value="Outros">
+                                    Outros
+                                </option>
                 </select>
             </div>
 
@@ -271,6 +304,10 @@
 
     <script
         src="{{ url_for('static', filename='js/meus_anuncios.js') }}"
+    ></script>
+
+    <script
+        src="{{ url_for('static', filename='js/pwa.js') }}"
     ></script>
 
 </body>

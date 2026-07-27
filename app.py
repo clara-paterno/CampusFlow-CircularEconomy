@@ -105,6 +105,7 @@ class Anuncio(db.Model):
         nullable=False,
         default=lambda: datetime.now(timezone.utc)
     )
+#endregion
 
 #region PAGES
 # Landing page do projeto 
@@ -121,6 +122,19 @@ def pagina_cadastrar():
 @app.route("/meus-anuncios")
 def pagina_meus_anuncios():
     return render_template("meus_anuncios.html")
+
+#Permite o navegador a acessasr arquivos fora de static
+@app.route("/service-worker.js")
+def disponibilizar_service_worker():
+    resposta = send_from_directory(
+        app.static_folder,
+        "service-worker.js",
+        mimetype="application/javascript"
+    )
+
+    resposta.headers["Cache-Control"] = "no-cache"
+
+    return resposta
 
 #endregion
 

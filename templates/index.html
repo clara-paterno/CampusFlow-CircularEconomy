@@ -9,7 +9,17 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>CampusFLow</title>
+    <title>CampusFlow</title>
+
+    <link
+        rel="manifest"
+        href="{{ url_for('static', filename='manifest.json') }}"
+    >
+
+    <meta
+        name="theme-color"
+        content="#29243f"
+    >
 
     <link
         rel="stylesheet"
@@ -288,6 +298,10 @@
 
     <script
         src="{{ url_for('static', filename='js/index.js') }}"
+    ></script>
+
+    <script
+        src="{{ url_for('static', filename='js/pwa.js') }}"
     ></script>
 
 </body>
