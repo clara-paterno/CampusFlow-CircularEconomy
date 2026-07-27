@@ -782,17 +782,25 @@ main {
 }
 
 .link-novo-anuncio {
-    flex-shrink: 0;
+    background-color: #29243f;
+    color: #ffffff;
 
-    color: #5a4f84;
+    padding: 12px 22px;
+    border-radius: 999px;
 
-    font-size: 0.92rem;
-    font-weight: 700;
     text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
 }
 
+
+
 .link-novo-anuncio:hover {
-    text-decoration: underline;
+    background-color: #5a97e1;
 }
 
 
@@ -1442,6 +1450,9 @@ main {
 }
 /*#endregion*/
 
+/* ==================================================
+   Mobile
+================================================== */
 /*#region MOBILE*/
 
 @media (max-width: 700px) {
@@ -1552,3 +1563,192 @@ main {
 
 /*#endregion*/
 
+
+/* ==================================================
+   Form de edição
+================================================== */
+.painel-edicao-anuncio {
+    margin-bottom: 36px;
+    padding: 32px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(219, 234, 254, 0.8),
+            rgba(220, 252, 231, 0.75)
+        );
+
+    border: 1px solid #bfdbfe;
+    border-radius: 22px;
+
+    box-shadow: 0 14px 34px rgba(37, 34, 56, 0.08);
+}
+
+.painel-edicao-anuncio[hidden] {
+    display: none;
+}
+
+.cabecalho-edicao-anuncio {
+    margin-bottom: 26px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.etiqueta-edicao-anuncio {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 6px 11px;
+
+    color: #166534;
+    background-color: #dcfce7;
+
+    border-radius: 999px;
+
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.cabecalho-edicao-anuncio h2 {
+    color: #252238;
+
+    font-size: 1.55rem;
+    line-height: 1.2;
+}
+
+.botao-fechar-edicao {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    color: #252238;
+    background-color: rgba(255, 255, 255, 0.72);
+
+    border: 1px solid #cbd5e1;
+    border-radius: 50%;
+
+    font-family: inherit;
+    font-size: 1.6rem;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.grade-formulario-edicao {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.campo-edicao-completo {
+    grid-column: 1 / -1;
+}
+
+.grupo-campo-edicao {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grupo-campo-edicao label {
+    color: #252238;
+
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.grupo-campo-edicao input,
+.grupo-campo-edicao select,
+.grupo-campo-edicao textarea {
+    width: 100%;
+    padding: 13px 15px;
+
+    color: #252238;
+    background-color: rgba(255, 255, 255, 0.9);
+
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+
+    font-family: inherit;
+    font-size: 0.92rem;
+
+    outline: none;
+}
+
+.grupo-campo-edicao textarea {
+    resize: vertical;
+}
+
+.grupo-campo-edicao input:focus,
+.grupo-campo-edicao select:focus,
+.grupo-campo-edicao textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.18);
+}
+
+.opcao-doacao-edicao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: #252238;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.opcao-doacao-edicao input {
+    width: 18px;
+    height: 18px;
+}
+
+.acoes-formulario-edicao {
+    margin-top: 26px;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.botao-cancelar-edicao,
+.botao-salvar-edicao {
+    padding: 12px 20px;
+
+    border-radius: 999px;
+
+    font-family: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.botao-cancelar-edicao {
+    color: #475569;
+    background-color: #ffffff;
+
+    border: 1px solid #cbd5e1;
+}
+
+.botao-salvar-edicao {
+    color: #ffffff;
+    background-color: #29243f;
+
+    border: 1px solid #29243f;
+}
+
+.mensagem-edicao-anuncio {
+    min-height: 22px;
+    margin-top: 16px;
+
+    color: #475569;
+
+    font-size: 0.88rem;
+}
