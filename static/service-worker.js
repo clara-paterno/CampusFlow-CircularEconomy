@@ -1,5 +1,5 @@
 /*
- * Service Worker básico do CampusFlow.
+ * Service Worker básico.
  *
  * Nesta etapa, ele apenas registra os eventos
  * de instalação e ativação.

@@ -384,13 +384,36 @@ Também foi identificada a necessidade de disponibilizar o Service Worker por um
 
 ### Reflexão crítica
 
-Durante a implementação da identificação anônima dos usuários, percebi que os anúncios deixavam de aparecer na página “Meus anúncios” após o navegador ou a aplicação serem reiniciados. A IA identificou corretamente que o problema poderia estar relacionado à perda da sessão e sugeriu torná-la permanente, configurando `session.permanent` e `PERMANENT_SESSION_LIFETIME`.
+Durante a implementação da identificação anônima dos usuários, percebi que os anúncios deixavam de aparecer na página “Meus anúncios” após o navegador ou a aplicação serem reiniciados. A IA identificou corretamente que o problema poderia estar relacionado à perda da sessão e sugeriu torná-la permanente, utilizando `session.permanent` e `PERMANENT_SESSION_LIFETIME`.
 
-Entretanto, a primeira solução apresentada utilizava uma chave secreta padrão diretamente no código quando a variável de ambiente não estivesse definida. Embora essa abordagem pudesse funcionar durante o desenvolvimento, ela não seguia adequadamente as boas práticas de segurança, pois uma `SECRET_KEY` previsível pode comprometer a assinatura dos cookies de sessão.
+Entretanto, a primeira solução apresentada utilizava uma chave secreta padrão diretamente no código quando a variável de ambiente não estivesse definida. Embora essa abordagem pudesse funcionar durante o desenvolvimento, ela não seguia adequadamente as boas práticas de segurança. Como os cookies de sessão do Flask são assinados com a `SECRET_KEY`, utilizar uma chave previsível e publicá-la no repositório poderia comprometer a segurança das sessões.
 
-Identifiquei essa limitação ao comparar a solução com uma segunda análise mais completa, que recomendava gerar a chave apenas uma vez, armazená-la em um arquivo `.env`, impedir seu versionamento pelo Git e manter o mesmo valor entre as reinicializações da aplicação. Também foi observada a necessidade de validar o `usuario_id` nas operações de edição e exclusão, evitando que um anúncio fosse alterado apenas por meio de seu identificador numérico.
+Ao revisar a solução, identifiquei que a chave deveria ser gerada apenas uma vez, armazenada em um arquivo `.env`, mantida entre as reinicializações da aplicação e excluída do versionamento pelo Git. A implementação final ficou responsável por carregar a chave pela variável de ambiente e interromper a inicialização caso ela não esteja configurada:
 
-A partir disso, conduzi a IA para uma solução mais adequada ao projeto: mantive a sessão permanente para preservar a identificação do navegador, mas substituí a chave inserida diretamente no código por uma variável de ambiente e considerei controles adicionais de autorização. Esse processo mostrou que a resposta inicial da IA não deveria ser copiada automaticamente, mas analisada, testada e adaptada ao contexto e aos requisitos de segurança da aplicação.
+```python
+load_dotenv()
+
+secret_key = os.getenv("SECRET_KEY")
+
+if not secret_key:
+    raise RuntimeError(
+        "A variável SECRET_KEY não foi configurada no arquivo .env."
+    )
+
+app.config["SECRET_KEY"] = secret_key
+```
+Durante a mesma análise, também foi identificada a necessidade de validar o usuario_id nas operações de edição e exclusão. Por isso, o backend consulta simultaneamente o identificador numérico do anúncio e o identificador armazenado na sessão:
+
+```python
+anuncio = Anuncio.query.filter_by(
+    id=anuncio_id,
+    usuario_id=session["usuario_id"]
+).first()
+```
+
+Com isso, mantive a sessão permanente para preservar a identificação do navegador, mas substituí a chave inserida diretamente no código por uma variável de ambiente e adicionei um controle de autorização nas operações de alteração.
+
+Esse processo mostrou que a resposta inicial da IA não deveria ser copiada automaticamente. Mesmo uma solução funcional precisa ser analisada, testada e adaptada ao contexto e aos requisitos de segurança da aplicação.
 
 ## Melhorias futuras
 

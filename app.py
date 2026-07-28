@@ -154,7 +154,7 @@ def criar_anuncio():
     descricao = dados.get("descricao")
     categoria = dados.get("categoria")
 
-    # Validação do título
+    # Valida o título
     if not isinstance(titulo, str) or not titulo.strip():
         return jsonify({
             "erro": "O campo 'titulo' é obrigatório e deve conter texto."
