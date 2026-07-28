@@ -5,6 +5,27 @@ const botoesFiltro = document.querySelectorAll(
     ".filtro-categoria"
 );
 
+const cabecalho = document.querySelector(".cabecalho");
+
+function atualizarCabecalhoDuranteRolagem() {
+    if (!cabecalho) {
+        return;
+    }
+
+    cabecalho.classList.toggle(
+        "cabecalho-rolado",
+        window.scrollY > 10
+    );
+}
+
+window.addEventListener(
+    "scroll",
+    atualizarCabecalhoDuranteRolagem,
+    { passive: true }
+);
+
+atualizarCabecalhoDuranteRolagem();
+
 
 /*
  * Formata um número para o padrão monetário brasileiro.

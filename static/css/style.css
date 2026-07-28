@@ -15,18 +15,34 @@ body {
 
 /* Cabeçalho principal */
 .cabecalho {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
     width: 100%;
     max-width: 1500px;
+    min-height: 96px;
 
     margin: 0 auto;
     padding: 0 28px;
 
     background-color: #ffffff;
 
+    border-bottom: 1px solid transparent;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
 
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Aplicada pelo JavaScript durante a rolagem */
+.cabecalho.cabecalho-rolado {
+    border-bottom-color: rgba(41, 36, 63, 0.14);
+    box-shadow: 0 4px 12px rgba(41, 36, 63, 0.06);
 }
 
 /* Logo do projeto */
