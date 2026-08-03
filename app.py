@@ -19,6 +19,12 @@ from flask_migrate import Migrate
 # Carrega as variáveis definidas no arquivo .env
 load_dotenv()
 
+# Identifica se a aplicação está sendo executada em produção
+is_production = (
+    os.getenv("RENDER", "").lower() == "true"
+    or os.getenv("APP_ENV", "").lower() == "production"
+)
+
 app = Flask(__name__)
 
 secret_key = os.getenv("SECRET_KEY")
@@ -35,7 +41,7 @@ app.config.update(
     PERMANENT_SESSION_LIFETIME=timedelta(days=180),
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=False,
+    SESSION_COOKIE_SECURE=is_production,
     SESSION_REFRESH_EACH_REQUEST=True,
 )
 
@@ -669,9 +675,7 @@ def tratar_erro_405(erro):
 
 #region RUN APP
 if __name__ == "__main__":
-    # Cria o arquivo do banco e suas tabelas, caso ainda não existam
-    with app.app_context():
-        db.create_all()
+    app.run(debug=not is_production)
 
     app.run(debug=True)
 
