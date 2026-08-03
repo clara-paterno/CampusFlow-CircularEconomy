@@ -42,6 +42,7 @@ body {
 /* Aplicada pelo JavaScript durante a rolagem */
 .cabecalho.cabecalho-rolado {
     border-bottom-color: rgba(41, 36, 63, 0.14);
+    border-radius: 0 0 28px 28px;
     box-shadow: 0 4px 12px rgba(41, 36, 63, 0.06);
 }
 
@@ -1477,31 +1478,72 @@ main {
         padding: 0;
     }
 
-    /* Cabeçalho */
-    .cabecalho {
-        max-width: none;
-        padding: 16px 18px;
+    /* Cabeçalho mobile */
+.cabecalho {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "logo botao"
+        "navegacao navegacao";
 
-        flex-wrap: wrap;
-        gap: 14px;
+    align-items: center;
+    gap: 12px 16px;
 
-        border-radius: 0;
-    }
+    width: 100%;
+    max-width: none;
+    min-height: auto;
 
-    .cabecalho nav {
-        width: 100%;
+    padding: 14px 16px 10px;
 
-        order: 3;
+    border-radius: 0;
+}
 
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-    }
+.cabecalho .logo-icone {
+    grid-area: logo;
 
-    .cabecalho nav a {
-        font-size: 0.75rem;
-        white-space: nowrap;
-    }
+    min-width: 0;
+
+    font-size: 1.15rem;
+    white-space: nowrap;
+}
+
+.cabecalho .botao-anunciar {
+    grid-area: botao;
+
+    padding: 11px 17px;
+
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.cabecalho nav {
+    grid-area: navegacao;
+
+    width: 100%;
+    padding: 10px 10px 2px;
+
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+
+    border-top: 1px solid rgba(41, 36, 63, 0.1);
+}
+
+.cabecalho nav a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 32px;
+    padding: 0 2px;
+
+    font-size: 0.72rem;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+}
 
     /* Conteúdo principal */
     main {
@@ -1568,6 +1610,104 @@ main {
     .secao-vitrine {
         padding: 0;
     }
+
+    /* Página de cadastro */
+.pagina-cadastro main {
+    padding: 16px 12px 40px;
+}
+
+.pagina-cadastro .cartao-cadastro {
+    width: 100%;
+    padding: 24px 18px;
+
+    border-radius: 20px;
+}
+
+/* Cabeçalho do formulário */
+.pagina-cadastro .cabecalho-formulario h1 {
+    font-size: 1.9rem;
+    line-height: 1.15;
+}
+
+.pagina-cadastro .cabecalho-formulario p {
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
+/* Categoria e preço em linhas separadas */
+.pagina-cadastro .linha-formulario {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+/* Venda e doação em linhas separadas */
+.pagina-cadastro .opcoes-tipo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.pagina-cadastro .opcao-tipo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 12px;
+
+    width: 100%;
+    min-height: auto;
+    padding: 14px 16px;
+
+    box-sizing: border-box;
+}
+
+.pagina-cadastro .opcao-tipo input[type="radio"] {
+    width: auto;
+    min-width: auto;
+    flex: 0 0 auto;
+
+    margin: 3px 0 0;
+}
+
+.pagina-cadastro .opcao-tipo span {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+
+    min-width: 0;
+    text-align: left;
+}
+
+.pagina-cadastro .opcao-tipo strong {
+    display: block;
+    line-height: 1.25;
+}
+
+.pagina-cadastro .opcao-tipo small {
+    display: block;
+    line-height: 1.4;
+}
+
+.pagina-cadastro .campo-formulario {
+    width: 100%;
+    min-width: 0;
+}
+
+.pagina-cadastro .campo-formulario input,
+.pagina-cadastro .campo-formulario select,
+.pagina-cadastro .campo-formulario textarea {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Textarea um pouco menor no celular */
+.pagina-cadastro textarea {
+    min-height: 115px;
+}
 }
 
 @media (max-width: 700px) {
@@ -1583,6 +1723,7 @@ main {
 /* ==================================================
    Form de edição
 ================================================== */
+/*#region FORM EDIÇÃO*/
 .painel-edicao-anuncio {
     margin-bottom: 36px;
     padding: 32px;
@@ -1768,3 +1909,4 @@ main {
 
     font-size: 0.88rem;
 }
+/*#endregion*/

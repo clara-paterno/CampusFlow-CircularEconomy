@@ -1,7 +1,7 @@
 /*
  * Service Worker básico.
  *
- * Nesta etapa, ele apenas registra os eventos
+ * Ele apenas registra os eventos
  * de instalação e ativação.
  *
  * Ainda não há cache nem interceptação
