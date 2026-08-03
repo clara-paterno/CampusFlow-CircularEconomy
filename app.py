@@ -14,6 +14,7 @@ from flask import (
 )
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 # Carrega as variáveis definidas no arquivo .env
 load_dotenv()
@@ -41,12 +42,24 @@ app.config.update(
 # Para que o Json identifique acentuação
 app.json.ensure_ascii = False
 
-# Configuração do banco de dados SQLite
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///economia_circular.db"
+
+# Escolhe o banco de dados conforme o ambiente
+database_url = os.getenv("DATABASE_URL")
+
+if database_url:
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = (
+        "sqlite:///economia_circular.db"
+    )
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Cria a conexão entre o Flask e o banco
 db = SQLAlchemy(app)
+
+# Gerencia alterações na estrutura do banco de dados
+migrate = Migrate(app, db)
 
 @app.before_request
 def identificar_usuario():
