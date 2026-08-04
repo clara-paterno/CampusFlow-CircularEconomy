@@ -114,8 +114,6 @@ main {
     background-color: #ffffff;
 }
 
-
-
 /* ==================================================
    Página de cadastro de anúncio
 ================================================== */
@@ -1910,3 +1908,318 @@ main {
     font-size: 0.88rem;
 }
 /*#endregion*/
+
+/* =========================================================
+   PÁGINAS DE AUTENTICAÇÃO
+   Login e criação de conta
+========================================================= */
+
+.pagina-autenticacao {
+    min-height: 100vh;
+    margin: 0;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding: 0px 20px;
+
+    font-family: "Inter", sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(34, 197, 94, 0.12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(59, 130, 246, 0.10),
+            transparent 35%
+        ),
+        #f8fafc;
+
+    color: #29243f;
+}
+
+.conteudo-autenticacao {
+    width: 100%;
+    max-width: 720px;
+    background: transparent;
+}
+
+.cartao-autenticacao {
+    width: 100%;
+    padding: 48px 56px;
+
+    background-color: #ffffff;
+
+    border: 1px solid rgba(41, 36, 63, 0.10);
+    border-radius: 24px;
+
+    box-shadow:
+        0 20px 50px rgba(41, 36, 63, 0.10);
+}
+
+
+.logo-autenticacao {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 32px;
+
+    color: #29243f;
+    text-decoration: none;
+}
+
+
+.logo-autenticacao span {
+    font-size: 28px;
+    line-height: 1;
+}
+
+
+.logo-autenticacao strong {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.cabecalho-autenticacao {
+    margin-bottom: 28px;
+}
+
+
+.cabecalho-autenticacao h1 {
+    margin: 0 0 10px;
+
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 700;
+
+    color: #29243f;
+}
+
+
+.cabecalho-autenticacao p {
+    margin: 0;
+
+    font-size: 15px;
+    line-height: 1.6;
+
+    color: #6b7280;
+}
+
+
+.formulario-autenticacao {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.grupo-formulario label {
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #29243f;
+}
+
+
+.grupo-formulario input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    font: inherit;
+    font-size: 15px;
+
+    color: #29243f;
+    background-color: #ffffff;
+
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.grupo-formulario input::placeholder {
+    color: #9ca3af;
+}
+
+
+.grupo-formulario input:hover {
+    border-color: #9ca3af;
+}
+
+
+.grupo-formulario input:focus {
+    border-color: #16a34a;
+
+    box-shadow:
+        0 0 0 4px rgba(22, 163, 74, 0.12);
+}
+
+
+.grupo-formulario small {
+    font-size: 12px;
+    line-height: 1.4;
+
+    color: #6b7280;
+}
+
+
+.botao-login,
+.botao-criar-conta {
+    width: 100%;
+
+    padding: 14px 18px;
+    margin-top: 4px;
+
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+
+    color: #ffffff;
+    background-color: #29243f;
+
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.botao-login:hover,
+.botao-criar-conta:hover {
+    background-color: #2563eb;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 24px rgba(37, 99, 235, 0.20);
+}
+
+
+.botao-login:active,
+.botao-criar-conta:active {
+    transform: translateY(0);
+}
+
+
+.botao-login:disabled,
+.botao-criar-conta:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+.mensagem-formulario {
+    min-height: 20px;
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+
+.mensagem-sucesso {
+    color: #15803d;
+}
+
+
+.mensagem-erro {
+    color: #dc2626;
+}
+
+
+.link-alternativo-autenticacao {
+    margin: 24px 0 0;
+
+    font-size: 14px;
+    text-align: center;
+
+    color: #6b7280;
+}
+
+
+.link-alternativo-autenticacao a {
+    font-weight: 600;
+
+    color: #2563eb;
+    text-decoration: none;
+}
+
+
+.link-alternativo-autenticacao a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE DAS PÁGINAS DE AUTENTICAÇÃO
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .pagina-autenticacao {
+        align-items: flex-start;
+
+        padding: 20px 14px;
+    }
+
+
+    .conteudo-autenticacao {
+        max-width: none;
+    }
+
+
+    .cartao-autenticacao {
+        padding: 28px 22px;
+
+        border-radius: 20px;
+    }
+
+
+    .logo-autenticacao {
+        margin-bottom: 26px;
+    }
+
+
+    .cabecalho-autenticacao h1 {
+        font-size: 26px;
+    }
+
+
+    .cabecalho-autenticacao p {
+        font-size: 14px;
+    }
+
+
+    .grupo-formulario input {
+        font-size: 16px;
+    }
+
+}

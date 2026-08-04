@@ -16,6 +16,11 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash,
+)
+
 # Carrega as variáveis definidas no arquivo .env
 load_dotenv()
 
@@ -126,6 +131,40 @@ class Anuncio(db.Model):
     )
 #endregion
 
+# Modelo/classe usuário
+#region USUARIO
+class Usuario(db.Model):
+    __tablename__ = "usuarios"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    nome = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    email = db.Column(
+        db.String(150),
+        nullable=False,
+        unique=True,
+        index=True
+    )
+
+    senha_hash = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    criado_em = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc)
+    )
+#endregion
+
 #region PAGES
 # Landing page do projeto 
 @app.route("/")
@@ -141,6 +180,16 @@ def pagina_cadastrar():
 @app.route("/meus-anuncios")
 def pagina_meus_anuncios():
     return render_template("meus_anuncios.html")
+
+#Acesso à página de criar conta
+@app.route("/criar-conta")
+def pagina_criar_conta():
+    return render_template("criar_conta.html")
+
+#Acesso à página de login
+@app.route("/login")
+def pagina_login():
+    return render_template("login.html")
 
 #Permite o navegador a acessasr arquivos fora de static
 @app.route("/service-worker.js")
@@ -648,6 +697,190 @@ def atualizar_anuncio(anuncio_id):
             "erro": "Não foi possível atualizar o anúncio."
         }), 500
 
+#endregion
+
+#region AUTH
+#POST criar conta
+@app.route("/api/auth/cadastro", methods=["POST"])
+def cadastrar_usuario():
+    dados = request.get_json(silent=True)
+
+    if not isinstance(dados, dict):
+        return jsonify({
+            "erro": "A requisição deve conter um objeto JSON válido."
+        }), 400
+
+    nome = dados.get("nome")
+    email = dados.get("email")
+    senha = dados.get("senha")
+
+    # Validação do nome
+    if not isinstance(nome, str) or not nome.strip():
+        return jsonify({
+            "erro": "O campo 'nome' é obrigatório e deve conter texto."
+        }), 400
+
+    nome = nome.strip()
+
+    if len(nome) > 100:
+        return jsonify({
+            "erro": "O nome deve possuir no máximo 100 caracteres."
+        }), 400
+
+    # Validação do e-mail
+    if not isinstance(email, str) or not email.strip():
+        return jsonify({
+            "erro": "O campo 'email' é obrigatório e deve conter texto."
+        }), 400
+
+    email = email.strip().lower()
+
+    if len(email) > 150:
+        return jsonify({
+            "erro": "O e-mail deve possuir no máximo 150 caracteres."
+        }), 400
+
+    # Validação da senha
+    if not isinstance(senha, str):
+        return jsonify({
+            "erro": "O campo 'senha' é obrigatório."
+        }), 400
+
+    if len(senha) < 8:
+        return jsonify({
+            "erro": "A senha deve possuir pelo menos 8 caracteres."
+        }), 400
+
+    if len(senha) > 128:
+        return jsonify({
+            "erro": "A senha deve possuir no máximo 128 caracteres."
+        }), 400
+
+    usuario_existente = Usuario.query.filter_by(
+        email=email
+    ).first()
+
+    if usuario_existente is not None:
+        return jsonify({
+            "erro": "Já existe uma conta cadastrada com este e-mail."
+        }), 409
+
+    try:
+        novo_usuario = Usuario(
+            nome=nome,
+            email=email,
+            senha_hash=generate_password_hash(senha)
+        )
+
+        db.session.add(novo_usuario)
+        db.session.commit()
+
+        return jsonify({
+            "mensagem": "Conta criada com sucesso.",
+            "usuario": {
+                "id": novo_usuario.id,
+                "nome": novo_usuario.nome,
+                "email": novo_usuario.email,
+                "criado_em": novo_usuario.criado_em.isoformat()
+            }
+        }), 201
+
+    except Exception:
+        db.session.rollback()
+
+        app.logger.exception(
+            "Ocorreu um erro ao cadastrar o usuário."
+        )
+
+        return jsonify({
+            "erro": "Não foi possível criar a conta."
+        }), 500
+
+#POST login
+@app.route("/api/auth/login", methods=["POST"])
+def fazer_login():
+    dados = request.get_json(silent=True)
+
+    if not isinstance(dados, dict):
+        return jsonify({
+            "erro": "A requisição deve conter um objeto JSON válido."
+        }), 400
+
+    email = dados.get("email")
+    senha = dados.get("senha")
+
+    if not isinstance(email, str) or not email.strip():
+        return jsonify({
+            "erro": "O campo 'email' é obrigatório."
+        }), 400
+
+    email = email.strip().lower()
+
+    if not isinstance(senha, str) or not senha:
+        return jsonify({
+            "erro": "O campo 'senha' é obrigatório."
+        }), 400
+
+    usuario = Usuario.query.filter_by(
+        email=email
+    ).first()
+
+    if usuario is None or not check_password_hash(
+        usuario.senha_hash,
+        senha
+    ):
+        return jsonify({
+            "erro": "E-mail ou senha inválidos."
+        }), 401
+
+    session["usuario_logado_id"] = usuario.id
+
+    return jsonify({
+        "mensagem": "Login realizado com sucesso.",
+        "usuario": {
+            "id": usuario.id,
+            "nome": usuario.nome,
+            "email": usuario.email
+        }
+    }), 200
+
+#logout
+@app.route("/api/auth/logout", methods=["POST"])
+def fazer_logout():
+    session.pop("usuario_logado_id", None)
+
+    return jsonify({
+        "mensagem": "Logout realizado com sucesso."
+    }), 200
+
+@app.route("/api/auth/sessao", methods=["GET"])
+def consultar_sessao():
+    usuario_id = session.get("usuario_logado_id")
+
+    if usuario_id is None:
+        return jsonify({
+            "autenticado": False,
+            "usuario": None
+        }), 200
+
+    usuario = db.session.get(Usuario, usuario_id)
+
+    if usuario is None:
+        session.pop("usuario_logado_id", None)
+
+        return jsonify({
+            "autenticado": False,
+            "usuario": None
+        }), 200
+
+    return jsonify({
+        "autenticado": True,
+        "usuario": {
+            "id": usuario.id,
+            "nome": usuario.nome,
+            "email": usuario.email
+        }
+    }), 200
 #endregion
 
 #region TRATAMENTO DE ERROS HTTP

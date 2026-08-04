@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Entrar | CampusFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="pagina-autenticacao">
+
+    <main class="conteudo-autenticacao">
+
+        <section class="cartao-autenticacao">
+
+            <a
+                href="{{ url_for('pagina_inicial') }}"
+                class="logo-autenticacao"
+            >
+                <span>♻</span>
+                <strong>CampusFlow</strong>
+            </a>
+
+            <div class="cabecalho-autenticacao">
+                <h1>Entre na sua conta</h1>
+
+                <p>
+                    Acesse seus anúncios e continue movimentando
+                    a economia circular no campus.
+                </p>
+            </div>
+
+            <form
+                id="form-login"
+                class="formulario-autenticacao"
+            >
+
+                <div class="grupo-formulario">
+                    <label for="email">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        maxlength="150"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="senha">Senha</label>
+
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        maxlength="128"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <p
+                    id="mensagem-login"
+                    class="mensagem-formulario"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <button
+                    type="submit"
+                    class="botao-login"
+                >
+                    Entrar
+                </button>
+
+            </form>
+
+            <p class="link-alternativo-autenticacao">
+                Ainda não possui uma conta?
+
+                <a href="{{ url_for('pagina_criar_conta') }}">
+                    Criar conta
+                </a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <script
+        src="{{ url_for('static', filename='js/login.js') }}"
+    ></script>
+
+    <script
+        src="{{ url_for('static', filename='js/pwa.js') }}"
+    ></script>
+
+</body>
+
+</html>

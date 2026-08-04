@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Criar conta | CampusFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="pagina-autenticacao">
+
+    <main class="conteudo-autenticacao">
+
+        <section class="cartao-autenticacao">
+
+            <a
+                href="{{ url_for('pagina_inicial') }}"
+                class="logo-autenticacao"
+            >
+                <span>♻</span>
+                <strong>CampusFlow</strong>
+            </a>
+
+            <div class="cabecalho-autenticacao">
+                <h1>Crie sua conta</h1>
+
+                <p>
+                    Cadastre-se para anunciar itens e gerenciar
+                    suas publicações no CampusFlow.
+                </p>
+            </div>
+
+            <form
+                id="form-criar-conta"
+                class="formulario-autenticacao"
+            >
+
+                <div class="grupo-formulario">
+                    <label for="nome">Nome</label>
+
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        maxlength="100"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="email">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        maxlength="150"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="senha">Senha</label>
+
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        minlength="8"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <small>
+                        Use pelo menos 8 caracteres.
+                    </small>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="confirmar-senha">
+                        Confirmar senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmar-senha"
+                        name="confirmar_senha"
+                        minlength="8"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <p
+                    id="mensagem-criar-conta"
+                    class="mensagem-formulario"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <button
+                    type="submit"
+                    class="botao-criar-conta"
+                >
+                    Criar conta
+                </button>
+
+            </form>
+
+            <p class="link-alternativo-autenticacao">
+                Já possui uma conta?
+
+                <a href="{{ url_for('pagina_login') }}">
+                    Entrar
+                </a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <script
+        src="{{ url_for('static', filename='js/criar_conta.js') }}"
+    ></script>
+
+    <script
+        src="{{ url_for('static', filename='js/pwa.js') }}"
+    ></script>
+
+</body>
+
+</html>
