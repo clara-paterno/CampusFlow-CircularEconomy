@@ -10,11 +10,14 @@ from flask import (
     request,
     jsonify,
     session,
+    redirect,
+    url_for,
     send_from_directory,
 )
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from functools import wraps
 
 from werkzeug.security import (
     generate_password_hash,
@@ -81,6 +84,61 @@ def identificar_usuario():
     if "usuario_id" not in session:
         session["usuario_id"] = str(uuid4())
 
+def login_obrigatorio(funcao):
+    @wraps(funcao)
+    def funcao_protegida(*args, **kwargs):
+        usuario_id = session.get("usuario_logado_id")
+
+        if usuario_id is None:
+            return jsonify({
+                "erro": "É necessário fazer login para acessar este recurso."
+            }), 401
+
+        usuario = db.session.get(
+            Usuario,
+            usuario_id
+        )
+
+        if usuario is None:
+            session.pop("usuario_logado_id", None)
+
+            return jsonify({
+                "erro": "A sessão do usuário não é mais válida."
+            }), 401
+
+        return funcao(*args, **kwargs)
+
+    return funcao_protegida
+
+def login_obrigatorio_pagina(funcao):
+    @wraps(funcao)
+    def pagina_protegida(*args, **kwargs):
+        usuario_id = session.get("usuario_logado_id")
+
+        if usuario_id is None:
+            return redirect(
+                url_for("pagina_login")
+            )
+
+        usuario = db.session.get(
+            Usuario,
+            usuario_id
+        )
+
+        if usuario is None:
+            session.pop(
+                "usuario_logado_id",
+                None
+            )
+
+            return redirect(
+                url_for("pagina_login")
+            )
+
+        return funcao(*args, **kwargs)
+
+    return pagina_protegida
+    
 # Modelo/classe anúncio
 #region ANUNCIO
 class Anuncio(db.Model):
@@ -124,6 +182,12 @@ class Anuncio(db.Model):
         nullable=False
     )
 
+    usuario_conta_id = db.Column(
+        db.Integer,
+        db.ForeignKey("usuarios.id"),
+        nullable=True
+    )
+
     criado_em = db.Column(
         db.DateTime,
         nullable=False,
@@ -163,6 +227,11 @@ class Usuario(db.Model):
         nullable=False,
         default=lambda: datetime.now(timezone.utc)
     )
+    anuncios = db.relationship(
+    "Anuncio",
+    backref="usuario",
+    lazy=True
+)
 #endregion
 
 #region PAGES
@@ -173,13 +242,19 @@ def pagina_inicial():
 
 # Redireciona para a página de cadastro do produto
 @app.route("/cadastrar")
+@login_obrigatorio_pagina
 def pagina_cadastrar():
-    return render_template("cadastrar.html")
+    return render_template(
+        "cadastrar.html"
+    )
 
 # Redireciona para a página de meus anúncios
 @app.route("/meus-anuncios")
+@login_obrigatorio_pagina
 def pagina_meus_anuncios():
-    return render_template("meus_anuncios.html")
+    return render_template(
+        "meus_anuncios.html"
+    )
 
 #Acesso à página de criar conta
 @app.route("/criar-conta")
@@ -208,6 +283,7 @@ def disponibilizar_service_worker():
 
 # region POST
 @app.route("/api/anuncios", methods=["POST"])
+@login_obrigatorio
 def criar_anuncio():
     dados = request.get_json(silent=True)
 
@@ -324,7 +400,8 @@ def criar_anuncio():
             preco=preco,
             doacao=doacao,
             imagem_url=imagem_url,
-            usuario_id=usuario_id
+            usuario_id=usuario_id,
+             usuario_conta_id=session["usuario_logado_id"]
         )
 
         db.session.add(novo_anuncio)
@@ -364,6 +441,7 @@ def criar_anuncio():
 
 #region GET
 @app.route("/api/anuncios", methods=["GET"])
+@login_obrigatorio
 def listar_anuncios():
     categoria = request.args.get("categoria")
 
@@ -410,13 +488,13 @@ def listar_anuncios():
 #endregion
 
 #region GET MEUS 
-
 @app.route("/api/anuncios/meus", methods=["GET"])
+@login_obrigatorio
 def listar_meus_anuncios():
-    usuario_id = session["usuario_id"]
+    usuario_id = session["usuario_logado_id"]
 
     consulta = Anuncio.query.filter_by(
-        usuario_id=usuario_id
+        usuario_conta_id=usuario_id
     )
 
     anuncios = consulta.order_by(
@@ -438,7 +516,7 @@ def listar_meus_anuncios():
             ),
             "doacao": anuncio.doacao,
             "imagem_url": anuncio.imagem_url,
-            "usuario_id": anuncio.usuario_id,
+            "usuario_conta_id": anuncio.usuario_conta_id,
             "criado_em": anuncio.criado_em.isoformat()
         })
 
@@ -451,10 +529,11 @@ def listar_meus_anuncios():
 
 #region DELETE
 @app.route("/api/anuncios/<int:anuncio_id>", methods=["DELETE"])
+@login_obrigatorio
 def excluir_anuncio(anuncio_id):
     anuncio = Anuncio.query.filter_by(
-    id=anuncio_id,
-    usuario_id=session["usuario_id"]
+        id=anuncio_id,
+        usuario_conta_id=session["usuario_logado_id"]
     ).first()
 
     if anuncio is None:
@@ -482,10 +561,11 @@ def excluir_anuncio(anuncio_id):
 
 #region PATCH
 @app.route("/api/anuncios/<int:anuncio_id>", methods=["PATCH"])
+@login_obrigatorio
 def atualizar_anuncio(anuncio_id):
     anuncio = Anuncio.query.filter_by(
         id=anuncio_id,
-        usuario_id=session["usuario_id"]
+        usuario_conta_id=session["usuario_logado_id"]
     ).first()
 
     if anuncio is None:
@@ -699,8 +779,8 @@ def atualizar_anuncio(anuncio_id):
 
 #endregion
 
-#region AUTH
 #POST criar conta
+#region AUTH
 @app.route("/api/auth/cadastro", methods=["POST"])
 def cadastrar_usuario():
     dados = request.get_json(silent=True)
