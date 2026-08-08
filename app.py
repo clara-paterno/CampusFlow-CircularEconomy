@@ -138,6 +138,34 @@ def login_obrigatorio_pagina(funcao):
         return funcao(*args, **kwargs)
 
     return pagina_protegida
+
+@app.context_processor
+def disponibilizar_usuario_atual():
+    usuario_id = session.get("usuario_logado_id")
+
+    if usuario_id is None:
+        return {
+            "usuario_atual": None
+        }
+
+    usuario = db.session.get(
+        Usuario,
+        usuario_id
+    )
+
+    if usuario is None:
+        session.pop(
+            "usuario_logado_id",
+            None
+        )
+
+        return {
+            "usuario_atual": None
+        }
+
+    return {
+        "usuario_atual": usuario
+    }
     
 # Modelo/classe anúncio
 #region ANUNCIO
@@ -441,7 +469,6 @@ def criar_anuncio():
 
 #region GET
 @app.route("/api/anuncios", methods=["GET"])
-@login_obrigatorio
 def listar_anuncios():
     categoria = request.args.get("categoria")
 
@@ -989,7 +1016,5 @@ def tratar_erro_405(erro):
 #region RUN APP
 if __name__ == "__main__":
     app.run(debug=not is_production)
-
-    app.run(debug=True)
 
 #endregion
