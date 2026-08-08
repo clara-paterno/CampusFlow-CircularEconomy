@@ -13,7 +13,10 @@ body {
     padding: 32px;
 }
 
-/* Cabeçalho principal */
+/* ==================================================
+   Cabeçalho principal
+================================================== */
+
 .cabecalho {
     position: sticky;
     top: 0;
@@ -21,58 +24,65 @@ body {
 
     width: 100%;
     max-width: 1500px;
-    min-height: 96px;
+    min-height: 78px;
 
     margin: 0 auto;
-    padding: 0 28px;
+    padding: 0 48px;
+
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 40px;
 
     background-color: #ffffff;
 
     border-bottom: 1px solid transparent;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease;
 }
 
+
 /* Aplicada pelo JavaScript durante a rolagem */
 .cabecalho.cabecalho-rolado {
     border-bottom-color: rgba(41, 36, 63, 0.14);
     border-radius: 0 0 28px 28px;
-    box-shadow: 0 4px 12px rgba(41, 36, 63, 0.06);
+
+    box-shadow:
+        0 4px 12px rgba(41, 36, 63, 0.06);
 }
 
-/* Logo do projeto */
+/* Logo */
 .logo {
-    color: #252238;
-    text-decoration: none;
-    font-size: 18px;
-    font-weight: bold;
-
     display: flex;
     align-items: center;
     gap: 8px;
+
+    color: #252238;
+
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .logo-icone {
     font-size: 24px;
 }
 
-/* Menu central */
+/* Navegação */
 .menu {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 32px;
 }
 
 .menu a {
     color: #474358;
-    text-decoration: none;
+
     font-size: 16px;
+    text-decoration: none;
 
     transition: color 0.2s ease;
 }
@@ -81,17 +91,59 @@ body {
     color: #5a97e1;
 }
 
-/* Botão de anunciar */
-.botao-anunciar {
-    background-color: #29243f;
-    color: #ffffff;
+/* Ações da conta */
+.acoes-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
+/* Entrar / Sair */
+.botao-conta-secundario {
+    padding: 10px 16px;
+
+    color: #29243f;
+    background-color: #ffffff;
+
+    border: 1px solid #d9dce3;
+    border-radius: 10px;
+
+    font: inherit;
+    font-weight: 500;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 1px 3px rgba(41, 36, 63, 0.06);
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.botao-conta-secundario:hover {
+    background-color: #f7f7f9;
+    border-color: #c8cad2;
+
+    transform: translateY(-1px);
+}
+
+/* Botão anunciar */
+.botao-anunciar {
     padding: 12px 22px;
+
+    color: #ffffff;
+    background-color: #29243f;
+
     border-radius: 999px;
 
-    text-decoration: none;
     font-size: 14px;
     font-weight: bold;
+    text-decoration: none;
+
+    white-space: nowrap;
 
     transition:
         background-color 0.2s ease,
@@ -100,7 +152,13 @@ body {
 
 .botao-anunciar:hover {
     background-color: #5a97e1;
+
     transform: translateY(-3px);
+}
+
+/* Botão hambúrguer escondido no desktop */
+.botao-menu-mobile {
+    display: none;
 }
 
 /* Apenas para organizar temporariamente o conteúdo abaixo */
@@ -1476,71 +1534,102 @@ main {
         padding: 0;
     }
 
-    /* Cabeçalho mobile */
+   /* Cabeçalho mobile */
 .cabecalho {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-        "logo botao"
-        "navegacao navegacao";
+    min-height: 70px;
+    padding: 14px 18px;
 
-    align-items: center;
-    gap: 12px 16px;
-
-    width: 100%;
-    max-width: none;
-    min-height: auto;
-
-    padding: 14px 16px 10px;
+    grid-template-columns: 1fr auto;
+    gap: 0;
 
     border-radius: 0;
 }
 
-.cabecalho .logo-icone {
-    grid-area: logo;
 
-    min-width: 0;
-
-    font-size: 1.15rem;
-    white-space: nowrap;
+.cabecalho .logo {
+    justify-self: start;
 }
 
-.cabecalho .botao-anunciar {
-    grid-area: botao;
 
-    padding: 11px 17px;
+.botao-menu-mobile {
+    width: 42px;
+    height: 42px;
 
-    font-size: 0.82rem;
-    white-space: nowrap;
-}
-
-.cabecalho nav {
-    grid-area: navegacao;
-
-    width: 100%;
-    padding: 10px 10px 2px;
-
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    align-items: center;
-    justify-content: space-between;
-    gap: 0;
-
-    border-top: 1px solid rgba(41, 36, 63, 0.1);
-}
-
-.cabecalho nav a {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    min-height: 32px;
-    padding: 0 2px;
+    color: #29243f;
+    background-color: #ffffff;
 
-    font-size: 0.72rem;
-    line-height: 1.2;
+    border: 1px solid #d9dce3;
+    border-radius: 10px;
+
+    font: inherit;
+    font-size: 1.3rem;
+
+    cursor: pointer;
+}
+
+
+/* Menu fechado */
+.cabecalho .menu,
+.cabecalho .acoes-cabecalho {
+    display: none;
+}
+
+
+/* Navegação quando o menu está aberto */
+.cabecalho.menu-aberto .menu {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+
+    border-top: 1px solid rgba(41, 36, 63, 0.10);
+}
+
+
+.cabecalho.menu-aberto .menu a {
+    width: 100%;
+    padding: 11px 4px;
+
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+
+/* Entrar/Sair + Anunciar */
+.cabecalho.menu-aberto .acoes-cabecalho {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    padding-top: 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    border-top: 1px solid rgba(41, 36, 63, 0.10);
+}
+
+
+.cabecalho.menu-aberto .botao-conta-secundario,
+.cabecalho.menu-aberto .botao-anunciar {
+    flex: 1;
+
     text-align: center;
-    white-space: nowrap;
+}
+
+
+.cabecalho.menu-aberto .botao-anunciar {
+    padding: 11px 14px;
 }
 
     /* Conteúdo principal */
@@ -1914,6 +2003,7 @@ main {
    Login e criação de conta
 ========================================================= */
 
+/*#region PAGINAS DE AUTENTICACAO*/
 .pagina-autenticacao {
     min-height: 100vh;
     margin: 0;
@@ -2223,3 +2313,5 @@ main {
     }
 
 }
+/*#endregion*/
+
