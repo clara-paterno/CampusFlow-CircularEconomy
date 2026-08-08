@@ -31,40 +31,77 @@
 
     <header class="cabecalho">
 
-        <a
-            href="{{ url_for('pagina_inicial') }}"
-            class="logo"
-        >
-            <span class="logo-icone">♻</span>
-            <span>CampusFlow</span>
+    <a
+        href="{{ url_for('pagina_inicial') }}"
+        class="logo"
+    >
+        <span class="logo-icone">♻</span>
+        <span>CampusFlow</span>
+    </a>
+
+    <button
+        type="button"
+        class="botao-menu-mobile"
+        id="botao-menu-mobile"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+    >
+        ☰
+    </button>
+
+    <nav class="menu">
+
+        <a href="{{ url_for('pagina_inicial') }}">
+            Início
         </a>
 
-        <nav class="menu">
-            <a href="{{ url_for('pagina_inicial') }}">
-                Início
-            </a>
-
-            <a href="#como-funciona">
-                Como funciona
-            </a>
-
-            <a href="#itens">
-                Itens
-            </a>
-
-            <a href="/meus-anuncios">
-                Meus anúncios
-            </a>
-        </nav>
-
-        <a
-            href="{{ url_for('pagina_cadastrar') }}"
-            class="botao-anunciar"
-        >
-            Anunciar item
+        <a href="#como-funciona">
+            Como funciona
         </a>
 
-    </header>
+        <a href="#itens">
+            Itens
+        </a>
+
+        <a href="{{ url_for('pagina_meus_anuncios') }}">
+            Meus anúncios
+        </a>
+
+    </nav>
+
+   <div class="acoes-cabecalho">
+
+    {% if usuario_atual %}
+
+        <button
+            type="button"
+            id="botao-sair"
+            class="botao-conta-secundario"
+        >
+            Sair
+        </button>
+
+    {% else %}
+
+        <a
+            href="{{ url_for('pagina_login') }}"
+            class="botao-conta-secundario"
+        >
+            Entrar
+        </a>
+
+    {% endif %}
+
+    <a
+        href="{{ url_for('pagina_cadastrar') }}"
+        class="botao-anunciar"
+    >
+        Anunciar item
+    </a>
+
+</div>
+
+</header>
 
     <main class="conteudo-inicial">
 
