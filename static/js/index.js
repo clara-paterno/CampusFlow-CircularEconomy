@@ -7,6 +7,14 @@ const botoesFiltro = document.querySelectorAll(
 
 const cabecalho = document.querySelector(".cabecalho");
 
+const botaoSair = document.getElementById(
+    "botao-sair"
+);
+
+const botaoMenuMobile = document.getElementById(
+    "botao-menu-mobile"
+);
+
 function atualizarCabecalhoDuranteRolagem() {
     if (!cabecalho) {
         return;
@@ -215,6 +223,81 @@ botoesFiltro.forEach((botao) => {
     });
 });
 
+if (botaoMenuMobile && cabecalho) {
+    botaoMenuMobile.addEventListener(
+        "click",
+        () => {
+            const menuEstaAberto =
+                cabecalho.classList.toggle(
+                    "menu-aberto"
+                );
+
+            botaoMenuMobile.textContent =
+                menuEstaAberto ? "×" : "☰";
+
+            botaoMenuMobile.setAttribute(
+                "aria-expanded",
+                String(menuEstaAberto)
+            );
+        }
+    );
+}
+
+const linksMenu = document.querySelectorAll(
+    ".menu a"
+);
+
+linksMenu.forEach((link) => {
+    link.addEventListener("click", () => {
+        cabecalho.classList.remove(
+            "menu-aberto"
+        );
+
+        botaoMenuMobile.textContent = "☰";
+
+        botaoMenuMobile.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    });
+});
+
+if (botaoSair) {
+    botaoSair.addEventListener(
+        "click",
+        async () => {
+            botaoSair.disabled = true;
+
+            try {
+                const resposta = await fetch(
+                    "/api/auth/logout",
+                    {
+                        method: "POST"
+                    }
+                );
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        resultado.erro ||
+                        "Não foi possível sair da conta."
+                    );
+                }
+
+                window.location.href = "/";
+
+            } catch (erro) {
+                console.error(
+                    "Erro ao realizar logout:",
+                    erro
+                );
+
+                botaoSair.disabled = false;
+            }
+        }
+    );
+}
 
 /*
  * Carrega todos os anúncios quando a página é aberta.
