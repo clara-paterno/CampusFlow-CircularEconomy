@@ -15,6 +15,10 @@ const botaoMenuMobile = document.getElementById(
     "botao-menu-mobile"
 );
 
+const overlayMenuMobile = document.getElementById(
+    "overlay-menu-mobile"
+);
+
 function atualizarCabecalhoDuranteRolagem() {
     if (!cabecalho) {
         return;
@@ -223,22 +227,76 @@ botoesFiltro.forEach((botao) => {
     });
 });
 
+function abrirMenuMobile() {
+    cabecalho.classList.remove("menu-fechando");
+    cabecalho.classList.add("menu-aberto");
+
+    overlayMenuMobile.classList.add("ativo");
+
+    botaoMenuMobile.textContent = "×";
+
+    botaoMenuMobile.setAttribute(
+        "aria-expanded",
+        "true"
+    );
+
+    botaoMenuMobile.setAttribute(
+        "aria-label",
+        "Fechar menu"
+    );
+}
+
+
+function fecharMenuMobile() {
+    if (!cabecalho.classList.contains("menu-aberto")) {
+        return;
+    }
+
+    cabecalho.classList.add("menu-fechando");
+    overlayMenuMobile.classList.remove("ativo");
+
+    setTimeout(() => {
+        cabecalho.classList.remove(
+            "menu-aberto",
+            "menu-fechando"
+        );
+
+        botaoMenuMobile.textContent = "☰";
+
+        botaoMenuMobile.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        botaoMenuMobile.setAttribute(
+            "aria-label",
+            "Abrir menu"
+        );
+    }, 280);
+}
+
+if (overlayMenuMobile) {
+    overlayMenuMobile.addEventListener(
+        "click",
+        fecharMenuMobile
+    );
+}
+
+
 if (botaoMenuMobile && cabecalho) {
     botaoMenuMobile.addEventListener(
         "click",
         () => {
             const menuEstaAberto =
-                cabecalho.classList.toggle(
+                cabecalho.classList.contains(
                     "menu-aberto"
                 );
 
-            botaoMenuMobile.textContent =
-                menuEstaAberto ? "×" : "☰";
-
-            botaoMenuMobile.setAttribute(
-                "aria-expanded",
-                String(menuEstaAberto)
-            );
+            if (menuEstaAberto) {
+                fecharMenuMobile();
+            } else {
+                abrirMenuMobile();
+            }
         }
     );
 }
@@ -249,16 +307,7 @@ const linksMenu = document.querySelectorAll(
 
 linksMenu.forEach((link) => {
     link.addEventListener("click", () => {
-        cabecalho.classList.remove(
-            "menu-aberto"
-        );
-
-        botaoMenuMobile.textContent = "☰";
-
-        botaoMenuMobile.setAttribute(
-            "aria-expanded",
-            "false"
-        );
+        fecharMenuMobile();
     });
 });
 

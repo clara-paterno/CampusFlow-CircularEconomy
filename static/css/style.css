@@ -91,6 +91,10 @@ body {
     color: #5a97e1;
 }
 
+.icone-menu-mobile {
+    display: none;
+}
+
 /* Ações da conta */
 .acoes-cabecalho {
     display: flex;
@@ -1571,6 +1575,96 @@ main {
     cursor: pointer;
 }
 
+.overlay-menu-mobile {
+    position: fixed;
+    inset: 0;
+
+    background-color: rgba(0, 0, 0, 0.32);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.28s ease,
+        visibility 0.28s ease;
+
+    z-index: 1050;
+}
+
+.overlay-menu-mobile.ativo {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cabecalho.menu-aberto .botao-menu-mobile {
+    width: 36px;
+    height: 36px;
+
+    padding: 0;
+
+    border-radius: 9px;
+
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+/* Quando aberto, o cabeçalho vira um painel lateral */
+.cabecalho.menu-aberto {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+    left: auto;
+
+    width: min(82vw, 310px);
+    max-width: none;
+
+    height: 100dvh;
+    min-height: 100dvh;
+
+    padding: 16px 14px;
+
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    align-content: stretch;
+
+    background-color: #ffffff;
+
+    border-radius: 18px 0 0 18px;
+
+    box-shadow:
+        -8px 0 28px rgba(41, 36, 63, 0.14);
+
+    overflow-y: auto;
+
+    z-index: 1100;
+
+    animation: abrir-menu-direita 0.28s ease-out;
+}
+
+.cabecalho.menu-fechando {
+    animation: fechar-menu 0.28s ease-in forwards;
+}
+
+@keyframes abrir-menu-direita {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fechar-menu{
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
 
 /* Menu fechado */
 .cabecalho .menu,
@@ -1582,6 +1676,7 @@ main {
 /* Navegação quando o menu está aberto */
 .cabecalho.menu-aberto .menu {
     grid-column: 1 / -1;
+    align-self: stretch;
 
     width: 100%;
     margin-top: 14px;
@@ -1590,7 +1685,8 @@ main {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 2px;
+    justify-content: flex-start;
+    gap: 4px;
 
     border-top: 1px solid rgba(41, 36, 63, 0.10);
 }
@@ -1598,10 +1694,49 @@ main {
 
 .cabecalho.menu-aberto .menu a {
     width: 100%;
-    padding: 11px 4px;
+    padding: 12px 14px;
 
-    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    color: #5f5a6e;
+
+    border-radius: 10px;
+
+    font-size: 0.92rem;
+    font-weight: 500;
     text-align: left;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.cabecalho.menu-aberto .icone-menu-mobile {
+    width: 19px;
+    height: 19px;
+
+    display: block;
+    flex-shrink: 0;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.cabecalho.menu-aberto .menu .item-menu-ativo {
+    color: #2563eb;
+    background-color: #eaf3ff;
+
+    font-weight: 600;
+}
+
+.cabecalho.menu-aberto .menu a:not(.item-menu-ativo):hover {
+    color: #29243f;
+    background-color: #f5f7fa;
 }
 
 

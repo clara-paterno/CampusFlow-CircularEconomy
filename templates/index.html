@@ -51,23 +51,72 @@
 
     <nav class="menu">
 
-        <a href="{{ url_for('pagina_inicial') }}">
-            Início
-        </a>
+    <a
+        href="{{ url_for('pagina_inicial') }}"
+        class="item-menu-ativo"
+    >
+        <svg
+            class="icone-menu-mobile"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path d="M3 11.5L12 4l9 7.5"></path>
+            <path d="M5.5 10v9h13v-9"></path>
+        </svg>
 
-        <a href="#como-funciona">
-            Como funciona
-        </a>
+        <span>Início</span>
+    </a>
 
-        <a href="#itens">
-            Itens
-        </a>
 
-        <a href="{{ url_for('pagina_meus_anuncios') }}">
-            Meus anúncios
-        </a>
+    <a href="#como-funciona">
 
-    </nav>
+        <svg
+            class="icone-menu-mobile"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 11v6"></path>
+            <path d="M12 7.5h.01"></path>
+        </svg>
+
+        <span>Como funciona</span>
+    </a>
+
+
+    <a href="#itens">
+
+        <svg
+            class="icone-menu-mobile"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path d="M4 6h16v12H4z"></path>
+            <path d="M8 10h8"></path>
+            <path d="M8 14h5"></path>
+        </svg>
+
+        <span>Itens</span>
+    </a>
+
+
+    <a href="{{ url_for('pagina_meus_anuncios') }}">
+
+        <svg
+            class="icone-menu-mobile"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path d="M6 4h12v16H6z"></path>
+            <path d="M9 8h6"></path>
+            <path d="M9 12h6"></path>
+            <path d="M9 16h4"></path>
+        </svg>
+
+        <span>Meus anúncios</span>
+    </a>
+
+</nav>
 
    <div class="acoes-cabecalho">
 
@@ -102,6 +151,11 @@
 </div>
 
 </header>
+
+<div
+    class="overlay-menu-mobile"
+    id="overlay-menu-mobile"
+></div>
 
     <main class="conteudo-inicial">
 
