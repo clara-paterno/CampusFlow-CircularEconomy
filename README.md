@@ -6,11 +6,13 @@ O projeto foi desenvolvido como uma aplicação única, integrando uma **API RES
 
 ## Status do projeto
 
-✅ Versão funcional em fase de revisão final.
+✅ Versão funcional e publicada em produção.
 
-O sistema possui autenticação de usuários, gerenciamento de anúncios, responsividade completa, configuração PWA e estrutura preparada para utilização de PostgreSQL e execução em ambiente de produção.
+O CampusFlow está disponível em ambiente de produção por meio do Render, utilizando PostgreSQL como banco de dados.
 
-A publicação da aplicação em uma URL pública e a implementação de estratégias de cache offline permanecem como etapas posteriores.
+A aplicação conta com autenticação de usuários, gerenciamento completo de anúncios, responsividade para desktop e dispositivos móveis, configuração PWA e migrations para controle da estrutura do banco de dados.
+
+A implementação de estratégias de cache offline permanece como uma possível melhoria futura.
 
 ## Funcionalidades
 
@@ -43,7 +45,7 @@ O Flask é responsável tanto pela **API REST** quanto pela entrega das páginas
 
 O frontend utiliza JavaScript e a **Fetch API** para realizar requisições à API. No backend, o Flask processa as operações e utiliza o **SQLAlchemy** para persistência dos dados.
 
-Em desenvolvimento local, quando nenhuma variável `DATABASE_URL` é fornecida, a aplicação utiliza um banco **SQLite**. A estrutura também está preparada para utilizar um banco PostgreSQL por meio da variável `DATABASE_URL`.
+Em desenvolvimento local, quando nenhuma variável `DATABASE_URL` é fornecida, a aplicação utiliza um banco **SQLite**. A estrutura também suporta PostgreSQL por meio da variável `DATABASE_URL`. Em produção, essa variável é configurada no Render para conectar a aplicação ao banco PostgreSQL.
 
 As alterações de estrutura do banco são controladas utilizando **Flask-Migrate/Alembic**, permitindo manter um histórico versionado das migrations.
 
@@ -69,9 +71,9 @@ A aplicação também mantém configurações de segurança para os cookies de s
 - Werkzeug;
 - python-dotenv;
 - SQLite para desenvolvimento local;
-- PostgreSQL como banco compatível para produção;
+- PostgreSQL em produção;
 - psycopg2-binary;
-- Gunicorn para execução em ambiente de produção.
+- Gunicorn para execução em produção no Render.
 
 ### Frontend
 
@@ -333,22 +335,24 @@ Para verificar a configuração da PWA no Chrome ou Edge:
 4. confira as seções **Manifest** e **Service Workers**;
 5. utilize a opção de instalação exibida pelo navegador.
 
-## Preparação para produção
+## Deploy e ambiente de produção
 
-O projeto possui uma estrutura preparada para execução em ambiente de produção.
+A aplicação foi publicada no **Render** como um serviço web Flask.
 
-Quando uma variável `DATABASE_URL` está disponível, o SQLAlchemy utiliza essa conexão em vez do SQLite local, permitindo o uso de PostgreSQL.
+O ambiente de produção utiliza:
 
-Também foram incluídos:
+- PostgreSQL como banco de dados;
+- Gunicorn como servidor WSGI;
+- Flask-Migrate/Alembic para aplicação das migrations;
+- variáveis de ambiente para configuração da aplicação;
+- HTTPS disponibilizado pelo Render;
+- cookies de sessão configurados de forma apropriada para o ambiente de produção.
 
-- `psycopg2-binary` como driver de conexão com PostgreSQL;
-- `Gunicorn` como servidor WSGI para ambiente de produção;
-- Flask-Migrate/Alembic para controle das migrations;
-- configuração de cookies seguros quando a aplicação identifica que está em produção.
+Durante o processo de deploy, as migrations são aplicadas ao banco PostgreSQL antes da inicialização da aplicação.
 
-No momento desta versão do README, nenhuma URL pública de produção é informada no repositório.
+### Aplicação em produção
 
-Caso a aplicação seja publicada posteriormente, o link poderá ser adicionado nesta seção.
+**CampusFlow:** [(https://campusflow-6t6o.onrender.com)]
 
 ## Diário de Bordo da IA
 
@@ -533,8 +537,6 @@ Esse processo reforçou que uma resposta de IA não deve ser copiada automaticam
 
 ## Melhorias futuras
 
-- publicar a aplicação em um serviço de nuvem e disponibilizar uma URL pública;
-- utilizar PostgreSQL efetivamente no ambiente de produção;
 - adicionar estratégias de cache ao Service Worker para funcionamento offline;
 - permitir upload de imagens em vez de utilizar apenas URLs;
 - implementar recuperação de senha e outras funcionalidades de gerenciamento de conta;
