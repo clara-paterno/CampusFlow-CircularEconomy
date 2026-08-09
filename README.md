@@ -2,13 +2,15 @@
 
 O **CampusFlow** é um marketplace de economia circular voltado à comunidade universitária. A plataforma permite que estudantes anunciem, vendam, doem e encontrem itens úteis, como livros, calculadoras, componentes eletrônicos, materiais acadêmicos e outros produtos que possam ser reutilizados dentro do campus.
 
-O projeto foi desenvolvido como uma aplicação única, integrando uma **API REST**, uma **Landing Page responsiva** e uma experiência mobile instalável como **Progressive Web App (PWA)**.
+O projeto foi desenvolvido como uma aplicação única, integrando uma **API REST**, uma **Landing Page responsiva**, autenticação de usuários e uma experiência mobile instalável como **Progressive Web App (PWA)**.
 
 ## Status do projeto
 
 ✅ Versão funcional em fase de revisão final.
 
-O deploy em nuvem e a implementação de cache offline são melhorias planejadas como diferenciais futuros.
+O sistema possui autenticação de usuários, gerenciamento de anúncios, responsividade completa, configuração PWA e estrutura preparada para utilização de PostgreSQL e execução em ambiente de produção.
+
+A publicação da aplicação em uma URL pública e a implementação de estratégias de cache offline permanecem como etapas posteriores.
 
 ## Funcionalidades
 
@@ -17,28 +19,43 @@ O deploy em nuvem e a implementação de cache offline são melhorias planejadas
 - exibição de estatísticas simuladas;
 - vitrine pública com os anúncios mais recentes;
 - filtragem de anúncios por categoria;
+- criação de conta;
+- login e logout de usuários;
+- proteção de páginas e recursos que exigem autenticação;
 - cadastro de itens para venda ou doação;
 - edição de anúncios;
 - exclusão de anúncios;
-- página “Meus anúncios”;
-- identificação anônima e persistente por navegador;
+- página “Meus anúncios” vinculada ao usuário autenticado;
 - proteção das operações de edição e exclusão por usuário;
 - validação dos dados recebidos pela API;
-- mensagens de erro e códigos HTTP adequados;
+- tratamento de erros e códigos HTTP adequados;
 - manifesto de aplicação web;
 - Service Worker básico;
 - ícones para instalação da PWA;
-- layout adaptado para desktop, tablet e dispositivos móveis.
+- menu mobile em formato de painel lateral;
+- layout adaptado para desktop, tablet e dispositivos móveis;
+- estrutura de migrations para evolução do banco de dados;
+- suporte a SQLite em desenvolvimento e PostgreSQL em produção.
 
 ## Arquitetura da aplicação
 
-O Flask é responsável tanto pela API REST quanto pela entrega das páginas HTML, arquivos CSS, JavaScript e recursos da PWA.
+O Flask é responsável tanto pela **API REST** quanto pela entrega das páginas HTML, arquivos CSS, JavaScript e recursos necessários para a PWA.
 
-O frontend realiza requisições para a API utilizando `fetch`, enquanto o Flask processa as operações e utiliza o SQLAlchemy para persistir os anúncios em um banco de dados SQLite.
+O frontend utiliza JavaScript e a **Fetch API** para realizar requisições à API. No backend, o Flask processa as operações e utiliza o **SQLAlchemy** para persistência dos dados.
 
-Como o projeto não utiliza um sistema completo de autenticação, cada navegador recebe um identificador único armazenado na sessão do Flask. Esse identificador é associado aos anúncios criados e utilizado para controlar quais registros podem ser visualizados, editados ou excluídos na página “Meus anúncios”.
+Em desenvolvimento local, quando nenhuma variável `DATABASE_URL` é fornecida, a aplicação utiliza um banco **SQLite**. A estrutura também está preparada para utilizar um banco PostgreSQL por meio da variável `DATABASE_URL`.
 
-A identificação é específica do navegador. Acessar a aplicação por outro navegador, por uma janela anônima ou após remover os cookies gera um novo identificador.
+As alterações de estrutura do banco são controladas utilizando **Flask-Migrate/Alembic**, permitindo manter um histórico versionado das migrations.
+
+### Autenticação
+
+O CampusFlow possui um modelo de usuário com nome, e-mail e senha armazenada de forma segura por meio de hash.
+
+Após o login, o identificador da conta autenticada é armazenado na sessão do Flask. As páginas de cadastro de anúncios e “Meus anúncios”, assim como as operações de criação, edição e exclusão, exigem autenticação.
+
+Cada novo anúncio é associado à conta que o criou. Dessa forma, a página “Meus anúncios” consulta apenas os registros pertencentes ao usuário autenticado, e as operações de edição e exclusão verificam essa associação antes de alterar o banco de dados.
+
+A aplicação também mantém configurações de segurança para os cookies de sessão, incluindo `HttpOnly`, `SameSite` e uso de cookie seguro quando executada em ambiente de produção.
 
 ## Tecnologias utilizadas
 
@@ -47,8 +64,14 @@ A identificação é específica do navegador. Acessar a aplicação por outro n
 - Python;
 - Flask;
 - Flask-SQLAlchemy;
-- SQLite;
-- python-dotenv.
+- Flask-Migrate;
+- SQLAlchemy;
+- Werkzeug;
+- python-dotenv;
+- SQLite para desenvolvimento local;
+- PostgreSQL como banco compatível para produção;
+- psycopg2-binary;
+- Gunicorn para execução em ambiente de produção.
 
 ### Frontend
 
@@ -56,13 +79,16 @@ A identificação é específica do navegador. Acessar a aplicação por outro n
 - CSS3;
 - JavaScript;
 - Fetch API;
-- Progressive Web App.
+- Progressive Web App (PWA);
+- Web App Manifest;
+- Service Worker.
 
 ### Desenvolvimento e versionamento
 
 - Git;
 - GitHub;
-- Visual Studio Code.
+- Visual Studio Code;
+- Alembic para versionamento da estrutura do banco de dados.
 
 ## Estrutura do projeto
 
@@ -74,10 +100,22 @@ CampusFlow-CircularEconomy/
 ├── .env.example
 ├── .gitignore
 │
+├── migrations/
+│   ├── versions/
+│   │   ├── ...create_anuncios_table.py
+│   │   ├── ...create_usuarios_table.py
+│   │   └── ...link_anuncios_to_usuarios.py
+│   ├── alembic.ini
+│   ├── env.py
+│   ├── README
+│   └── script.py.mako
+│
 ├── templates/
 │   ├── index.html
 │   ├── cadastrar.html
-│   └── meus_anuncios.html
+│   ├── meus_anuncios.html
+│   ├── criar_conta.html
+│   └── login.html
 │
 ├── static/
 │   ├── css/
@@ -87,6 +125,8 @@ CampusFlow-CircularEconomy/
 │   │   ├── index.js
 │   │   ├── cadastrar.js
 │   │   ├── meus_anuncios.js
+│   │   ├── criar_conta.js
+│   │   ├── login.js
 │   │   └── pwa.js
 │   │
 │   ├── icons/
@@ -100,7 +140,9 @@ CampusFlow-CircularEconomy/
     └── economia_circular.db
 ```
 
-A pasta `instance/`, o banco de dados local e o arquivo `.env` são gerados ou configurados localmente e não são enviados ao repositório.
+A pasta `instance/`, o banco de dados SQLite local e o arquivo `.env` são utilizados localmente e não devem ser enviados ao repositório.
+
+A pasta `migrations/`, por outro lado, é versionada e mantém o histórico das alterações realizadas na estrutura do banco.
 
 ## Como executar localmente
 
@@ -180,19 +222,29 @@ Copie o valor gerado e substitua o conteúdo de `SECRET_KEY` no arquivo `.env`:
 SECRET_KEY=sua_chave_secreta_gerada
 ```
 
-A mesma chave deve ser mantida entre as reinicializações da aplicação para preservar e validar corretamente os cookies de sessão.
+A `SECRET_KEY` é utilizada pelo Flask para assinar os dados da sessão e deve permanecer privada.
 
 O arquivo `.env` contém informações locais e não deve ser enviado ao repositório.
 
-### 6. Execute a aplicação
+### 6. Aplique as migrations
+
+Com o ambiente virtual ativo, execute:
 
 ```bash
-python app.py
+python -m flask --app app db upgrade
 ```
 
-Na primeira execução, o Flask criará automaticamente o banco de dados SQLite e a tabela utilizada para armazenar os anúncios.
+Esse comando aplica as migrations existentes e prepara a estrutura do banco de dados local.
 
-### 7. Acesse no navegador
+Quando `DATABASE_URL` não está configurada, a aplicação utiliza automaticamente o SQLite.
+
+### 7. Execute a aplicação
+
+```bash
+python -m flask --app app run --debug
+```
+
+### 8. Acesse no navegador
 
 Abra:
 
@@ -200,7 +252,7 @@ Abra:
 http://127.0.0.1:5000
 ```
 
-A mesma aplicação Flask disponibiliza a API REST, a Landing Page e as páginas da experiência PWA.
+A mesma aplicação Flask disponibiliza a Landing Page, as páginas da aplicação, os recursos da PWA e os endpoints da API REST.
 
 ### Encerrando a aplicação
 
@@ -218,30 +270,45 @@ deactivate
 
 ## Endpoints da API
 
+### Anúncios
+
+| Método | Endpoint | Descrição | Autenticação |
+|---|---|---|---|
+| `GET` | `/api/anuncios` | Lista os anúncios cadastrados | Não |
+| `GET` | `/api/anuncios?categoria=Livros` | Lista anúncios filtrados por categoria | Não |
+| `POST` | `/api/anuncios` | Cadastra um novo anúncio | Sim |
+| `GET` | `/api/anuncios/meus` | Lista os anúncios do usuário autenticado | Sim |
+| `PATCH` | `/api/anuncios/<id>` | Atualiza um anúncio pertencente ao usuário | Sim |
+| `DELETE` | `/api/anuncios/<id>` | Exclui um anúncio pertencente ao usuário | Sim |
+
+### Autenticação
+
 | Método | Endpoint | Descrição |
 |---|---|---|
-| `GET` | `/api/anuncios` | Lista todos os anúncios cadastrados |
-| `GET` | `/api/anuncios?categoria=Livros` | Lista anúncios filtrados por categoria |
-| `POST` | `/api/anuncios` | Cadastra um novo anúncio |
-| `GET` | `/api/anuncios/meus` | Lista os anúncios associados ao navegador atual |
-| `PATCH` | `/api/anuncios/<id>` | Atualiza um anúncio pertencente ao usuário atual |
-| `DELETE` | `/api/anuncios/<id>` | Exclui um anúncio pertencente ao usuário atual |
+| `POST` | `/api/auth/cadastro` | Cria uma nova conta |
+| `POST` | `/api/auth/login` | Autentica um usuário |
+| `POST` | `/api/auth/logout` | Encerra a sessão autenticada |
+| `GET` | `/api/auth/sessao` | Informa o estado atual da autenticação |
 
 As requisições e respostas da API utilizam o formato JSON.
 
-As rotas de criação e atualização verificam campos obrigatórios, tipos de dados, limites de caracteres, preço, indicação de doação e URL da imagem.
+As rotas de criação e atualização de anúncios verificam campos obrigatórios, tipos de dados, limites de caracteres, preço, indicação de doação e URL da imagem.
 
-As operações de edição e exclusão também verificam o identificador armazenado na sessão, impedindo que um navegador altere anúncios pertencentes a outro usuário.
+As operações relacionadas aos próprios anúncios utilizam o identificador da conta autenticada armazenado na sessão. Com isso, um usuário não pode editar ou excluir anúncios pertencentes a outra conta apenas conhecendo seu identificador numérico.
+
+As senhas não são armazenadas diretamente no banco de dados. O backend utiliza funções de hash e verificação de senha disponibilizadas pelo Werkzeug.
 
 ### Principais códigos HTTP
 
 | Código | Significado |
 |---:|---|
 | `200` | Requisição concluída com sucesso |
-| `201` | Anúncio criado com sucesso |
+| `201` | Recurso criado com sucesso |
 | `400` | Dados enviados são inválidos |
-| `404` | Anúncio ou rota não encontrado |
+| `401` | Autenticação necessária ou credenciais inválidas |
+| `404` | Recurso ou rota não encontrado |
 | `405` | Método HTTP não permitido |
+| `409` | Conflito, como tentativa de cadastrar um e-mail já existente |
 | `500` | Erro interno inesperado |
 
 ## Progressive Web App
@@ -253,9 +320,10 @@ O projeto possui:
 - registro de um Service Worker;
 - modo de exibição `standalone`;
 - layout responsivo para dispositivos móveis;
-- possibilidade de instalação em navegadores compatíveis.
+- possibilidade de instalação em navegadores compatíveis;
+- navegação mobile adaptada para uma experiência semelhante à de um aplicativo.
 
-O Service Worker atual é básico e atende ao requisito de registro e instalação da aplicação. Estratégias de cache e funcionamento offline permanecem como melhorias futuras.
+O Service Worker atual é básico e atende ao requisito de registro e instalação da aplicação. Estratégias adicionais de cache e funcionamento offline permanecem como melhorias futuras.
 
 Para verificar a configuração da PWA no Chrome ou Edge:
 
@@ -264,6 +332,23 @@ Para verificar a configuração da PWA no Chrome ou Edge:
 3. acesse a aba **Application**;
 4. confira as seções **Manifest** e **Service Workers**;
 5. utilize a opção de instalação exibida pelo navegador.
+
+## Preparação para produção
+
+O projeto possui uma estrutura preparada para execução em ambiente de produção.
+
+Quando uma variável `DATABASE_URL` está disponível, o SQLAlchemy utiliza essa conexão em vez do SQLite local, permitindo o uso de PostgreSQL.
+
+Também foram incluídos:
+
+- `psycopg2-binary` como driver de conexão com PostgreSQL;
+- `Gunicorn` como servidor WSGI para ambiente de produção;
+- Flask-Migrate/Alembic para controle das migrations;
+- configuração de cookies seguros quando a aplicação identifica que está em produção.
+
+No momento desta versão do README, nenhuma URL pública de produção é informada no repositório.
+
+Caso a aplicação seja publicada posteriormente, o link poderá ser adicionado nesta seção.
 
 ## Diário de Bordo da IA
 
@@ -277,10 +362,11 @@ As respostas não foram aplicadas automaticamente. Cada solução foi analisada,
 
 ### Compartilhamento de histórico
 
-O chat foi essencial para diagnosticar o problema de persistência da sessão e orientar a configuração correta do `usuario_id`, da `SECRET_KEY` e dos cookies. Também auxiliou na implementação do PWA, explicando e guiando a criação do `manifest.json`, dos ícones e do service worker, sempre com testes e adaptações ao projeto.
+O chat foi utilizado durante diferentes etapas do desenvolvimento, incluindo o diagnóstico da persistência da sessão, configuração da `SECRET_KEY`, implementação da PWA, análise do Service Worker e evolução da arquitetura do projeto.
+
+Histórico compartilhado:
 
 https://chatgpt.com/share/6a668bd9-9ab0-83e9-8db6-e7f94394d758
-
 
 ### Estratégia de engenharia de prompts
 
@@ -289,7 +375,9 @@ https://chatgpt.com/share/6a668bd9-9ab0-83e9-8db6-e7f94394d758
 
 #### Contexto
 
-Era necessário manter a identificação do mesmo navegador entre diferentes acessos à aplicação. Inicialmente, os anúncios permaneciam no banco, mas deixavam de aparecer na página “Meus anúncios” após a aplicação ser reiniciada.
+Durante uma etapa inicial do desenvolvimento, antes da implementação da autenticação por contas, o CampusFlow utilizava uma identificação anônima por navegador.
+
+Era necessário manter essa identificação entre diferentes acessos à aplicação. Inicialmente, os anúncios permaneciam no banco, mas deixavam de aparecer na página “Meus anúncios” após a aplicação ser reiniciada.
 
 #### Prompt utilizado
 
@@ -313,13 +401,13 @@ Era necessário manter a identificação do mesmo navegador entre diferentes ace
 
 A análise mostrou que o identificador era armazenado na sessão do Flask, mas sua permanência dependia da configuração do cookie e da manutenção da mesma `SECRET_KEY`.
 
-A solução aplicada incluiu:
+A solução aplicada naquela etapa incluiu:
 
 - uso de uma `SECRET_KEY` fixa carregada pelo arquivo `.env`;
 - configuração da sessão como permanente;
 - definição de um tempo de duração para a sessão;
-- criação do `usuario_id` apenas quando ele ainda não existe;
-- associação do identificador aos anúncios cadastrados.
+- criação do `usuario_id` apenas quando ele ainda não existia;
+- associação desse identificador aos anúncios cadastrados.
 
 #### Validação e adaptações
 
@@ -327,13 +415,21 @@ A solução foi testada reiniciando a aplicação e acessando novamente pelo mes
 
 Também foram realizados testes em uma janela anônima, que recebeu um identificador diferente, comprovando a separação entre navegadores.
 
-As rotas de edição e exclusão foram adaptadas para consultar simultaneamente o ID do anúncio e o `usuario_id` da sessão, impedindo alterações em anúncios pertencentes a outro navegador.
+As operações de edição e exclusão também foram protegidas para impedir a alteração de registros associados a outra identificação.
+
+#### Evolução posterior
+
+Posteriormente, o projeto evoluiu para um sistema de **criação de conta e login**.
+
+A propriedade atual dos anúncios passou a ser vinculada à conta autenticada, permitindo que o usuário acesse seus anúncios de forma independente da identificação anônima originalmente utilizada no navegador.
+
+Essa evolução foi importante porque transformou uma solução inicialmente adequada ao requisito mínimo do desafio em uma estrutura de autenticação mais completa.
 
 #### Aprendizado
 
-Esse processo permitiu compreender melhor a relação entre sessões, cookies, `SECRET_KEY` e persistência da identificação no Flask.
+Esse processo permitiu compreender melhor a relação entre sessões, cookies, `SECRET_KEY` e persistência de identificação no Flask.
 
-Também ficou claro que o cookie não armazena os anúncios. Ele mantém os dados necessários para que o servidor reconheça o navegador e consulte os registros correspondentes no banco de dados.
+Também ficou claro que o cookie de sessão não armazena os anúncios. Ele mantém informações que permitem ao backend identificar a sessão e realizar as consultas apropriadas no banco de dados.
 
 </details>
 
@@ -380,15 +476,30 @@ Também foi identificada a necessidade de disponibilizar o Service Worker por um
 ```text
 /service-worker.js
 ```
+
+A implementação foi mantida inicialmente simples para atender ao requisito obrigatório de instalação da PWA. Estratégias de cache e funcionamento offline foram deixadas para uma possível evolução posterior.
+
+#### Aprendizado
+
+A implementação passo a passo ajudou a diferenciar o papel do manifesto, do Service Worker e do código responsável pelo seu registro.
+
+Também permitiu compreender por que o escopo do Service Worker é relevante e por que uma implementação básica pode atender ao requisito de instalação sem necessariamente implementar funcionamento offline.
+
 </details>
 
 ### Reflexão crítica
 
-Durante a implementação da identificação anônima dos usuários, percebi que os anúncios deixavam de aparecer na página “Meus anúncios” após o navegador ou a aplicação serem reiniciados. A IA identificou corretamente que o problema poderia estar relacionado à perda da sessão e sugeriu torná-la permanente, utilizando `session.permanent` e `PERMANENT_SESSION_LIFETIME`.
+Um dos momentos mais importantes do uso da IA ocorreu durante a implementação inicial da identificação de usuários por sessão.
 
-Entretanto, a primeira solução apresentada utilizava uma chave secreta padrão diretamente no código quando a variável de ambiente não estivesse definida. Embora essa abordagem pudesse funcionar durante o desenvolvimento, ela não seguia adequadamente as boas práticas de segurança. Como os cookies de sessão do Flask são assinados com a `SECRET_KEY`, utilizar uma chave previsível e publicá-la no repositório poderia comprometer a segurança das sessões.
+A IA identificou corretamente que a perda da identificação entre diferentes execuções poderia estar relacionada à duração da sessão e sugeriu o uso de `session.permanent` e `PERMANENT_SESSION_LIFETIME`.
 
-Ao revisar a solução, identifiquei que a chave deveria ser gerada apenas uma vez, armazenada em um arquivo `.env`, mantida entre as reinicializações da aplicação e excluída do versionamento pelo Git. A implementação final ficou responsável por carregar a chave pela variável de ambiente e interromper a inicialização caso ela não esteja configurada:
+Entretanto, uma das primeiras soluções apresentadas utilizava uma chave secreta padrão diretamente no código quando a variável de ambiente não estivesse definida.
+
+Embora essa abordagem pudesse funcionar durante o desenvolvimento, ela não seguia adequadamente as boas práticas de segurança. Como os cookies de sessão do Flask são assinados utilizando a `SECRET_KEY`, publicar uma chave previsível no repositório poderia comprometer a segurança das sessões.
+
+Ao revisar a solução, identifiquei que a chave deveria ser gerada apenas uma vez, armazenada localmente em um arquivo `.env`, mantida entre as reinicializações da aplicação e excluída do versionamento pelo Git.
+
+A implementação passou então a exigir explicitamente a variável:
 
 ```python
 load_dotenv()
@@ -402,24 +513,30 @@ if not secret_key:
 
 app.config["SECRET_KEY"] = secret_key
 ```
-Durante a mesma análise, também foi identificada a necessidade de validar o usuario_id nas operações de edição e exclusão. Por isso, o backend consulta simultaneamente o identificador numérico do anúncio e o identificador armazenado na sessão:
+
+Outra evolução importante ocorreu na autorização dos anúncios.
+
+A primeira implementação associava os registros apenas ao identificador anônimo do navegador. Posteriormente, com a criação de contas e login, os anúncios passaram a ser associados também ao usuário autenticado.
+
+As operações protegidas atualmente verificam a conta armazenada na sessão antes de modificar um anúncio:
 
 ```python
 anuncio = Anuncio.query.filter_by(
     id=anuncio_id,
-    usuario_id=session["usuario_id"]
+    usuario_conta_id=session["usuario_logado_id"]
 ).first()
 ```
 
-Com isso, mantive a sessão permanente para preservar a identificação do navegador, mas substituí a chave inserida diretamente no código por uma variável de ambiente e adicionei um controle de autorização nas operações de alteração.
+Além disso, as senhas das contas não são armazenadas diretamente. A aplicação utiliza funções de geração e verificação de hash para realizar a autenticação.
 
-Esse processo mostrou que a resposta inicial da IA não deveria ser copiada automaticamente. Mesmo uma solução funcional precisa ser analisada, testada e adaptada ao contexto e aos requisitos de segurança da aplicação.
+Esse processo reforçou que uma resposta de IA não deve ser copiada automaticamente. Mesmo quando uma sugestão funciona tecnicamente, ela precisa ser compreendida, testada e revisada de acordo com os requisitos de segurança, arquitetura e evolução do projeto.
 
 ## Melhorias futuras
 
-- realizar o deploy da aplicação;
-- substituir o SQLite por PostgreSQL em produção;
-- adicionar estratégias de cache ao Service Worker;
-- permitir o envio de imagens em vez de apenas URLs;
-- implementar autenticação completa de usuários;
-- criar testes automatizados para a API.
+- publicar a aplicação em um serviço de nuvem e disponibilizar uma URL pública;
+- utilizar PostgreSQL efetivamente no ambiente de produção;
+- adicionar estratégias de cache ao Service Worker para funcionamento offline;
+- permitir upload de imagens em vez de utilizar apenas URLs;
+- implementar recuperação de senha e outras funcionalidades de gerenciamento de conta;
+- criar testes automatizados para a API e para os fluxos de autenticação;
+- continuar refinando acessibilidade e experiência da interface mobile.
