@@ -379,7 +379,7 @@ https://chatgpt.com/share/6a668bd9-9ab0-83e9-8db6-e7f94394d758
 
 #### Contexto
 
-Durante uma etapa inicial do desenvolvimento, antes da implementação da autenticação por contas, o CampusFlow utilizava uma identificação anônima por navegador.
+Este prompt corresponde a uma etapa anterior do desenvolvimento, quando o CampusFlow utilizava identificação anônima por navegador. Posteriormente, essa solução foi evoluída para um sistema de autenticação por contas, mantendo o aprendizado sobre persistência de sessão e segurança da SECRET_KEY.
 
 Era necessário manter essa identificação entre diferentes acessos à aplicação. Inicialmente, os anúncios permaneciam no banco, mas deixavam de aparecer na página “Meus anúncios” após a aplicação ser reiniciada.
 
